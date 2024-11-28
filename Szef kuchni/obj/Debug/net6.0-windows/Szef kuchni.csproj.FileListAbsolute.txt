@@ -1,3 +1,0 @@
-D:\1\Szef kuchni\Szef kuchni\obj\Debug\net6.0-windows\Szef kuchni.csproj.AssemblyReference.cache
-D:\1\Szef kuchni\Szef kuchni\obj\Debug\net6.0-windows\App.g.cs
-D:\1\Szef kuchni\Szef kuchni\obj\Debug\net6.0-windows\Szef kuchni_MarkupCompile.cache
