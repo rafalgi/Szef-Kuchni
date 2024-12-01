@@ -21,7 +21,7 @@ namespace Szef_kuchni.MVVM.ViewModel
             Recipes = new ObservableCollection<Recipe>();
 
             // Utwórz instancję Datahelper
-            string dbPath = @"C:\Users\dzago\source\repos\Szef-Kuchni\Szef kuchni\recipes (1).db"; // Ścieżka do bazy danych
+            string dbPath = @"../../recipes.db"; // Ścieżka do bazy danych
             _dataHelper = new Datahelper(dbPath);
 
             // Załaduj przepisy z bazy danych
