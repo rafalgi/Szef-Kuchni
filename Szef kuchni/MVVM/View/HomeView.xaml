@@ -7,23 +7,32 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        
-        <ItemsControl ItemsSource="{Binding Recipes}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="Black" BorderThickness="1" Margin="5" Padding="10">
-                        <StackPanel>
-                            <Image Source="{Binding SavePath}" Width="100" Height="100" Stretch="UniformToFill" Margin="0,0,0,5"/>
-                            <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16" TextAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Recipes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="5" Padding="10">
+                            <StackPanel>
+                                <Image Source="{Binding FullImagePath}" 
+                               Width="200" 
+                               Height="200" 
+                               Stretch="UniformToFill" 
+                               Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding Title}" 
+                               FontWeight="Bold"
+                               FontSize="16" 
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>
