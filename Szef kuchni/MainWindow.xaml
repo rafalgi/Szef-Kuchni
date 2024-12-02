@@ -81,6 +81,13 @@
             <ContentControl Grid.Column="1" Grid.Row="1" Margin="10,10,10,10" Grid.RowSpan="2" Content="{Binding CurrentView}" />
 
             <!-- Górne przyciski sterujące -->
+            <TextBox Width="600"
+                     Height="40"
+                     VerticalContentAlignment="Center"
+                     HorizontalAlignment="Left"
+                     Margin="20"
+                     Grid.Column="1"
+                     Style="{StaticResource TextBoxStyle}"/>
             <Button Content="X"
                     Width="30"
                     Height="30"
