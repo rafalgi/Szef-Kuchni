@@ -5,31 +5,59 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="1000">
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <!-- Dodanie tytułu "Popularne" w lewym górnym rogu -->
+        <TextBlock Text="Popularne"
+                   FontSize="40"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Margin="20,0,0,0"
+                   FontFamily="/Fonts/#Cinzel" />
+
+        <!-- Główna zawartość poniżej -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,70,0,0">
             <ItemsControl ItemsSource="{Binding Recipes}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Black" BorderThickness="1" Margin="5" Padding="10">
-                            <StackPanel>
+                        <Border BorderBrush="Transparent" 
+                                BorderThickness="1" 
+                                Margin="10" 
+                                Padding="15" 
+                                Width="300" 
+                                Height="380">
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center">
                                 <Image Source="{Binding FullImagePath}" 
-                               Width="200" 
-                               Height="200" 
-                               Stretch="UniformToFill" 
-                               Margin="0,0,0,5"/>
+                                       Width="280" 
+                                       Height="250" 
+                                       Stretch="UniformToFill" 
+                                       Margin="0,0,0,10"/>
                                 <TextBlock Text="{Binding Title}" 
-                               FontWeight="Bold"
-                               FontSize="16" 
-                               TextAlignment="Center"
-                               TextWrapping="Wrap"/>
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           FontWeight="Bold"
+                                           FontSize="18" 
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap" 
+                                           TextTrimming="CharacterEllipsis" 
+                                           Height="60"/>
+                                <TextBlock Text="{Binding PrepTime, StringFormat='{}{0} minut'}" 
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           FontWeight="Light"
+                                           FontSize="16" 
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap" 
+                                           TextTrimming="CharacterEllipsis" 
+                                           Margin="5,0,5,0"/>
                             </StackPanel>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel />
+                        <!-- Zmieniamy WrapPanel na UniformGrid, który automatycznie rozłoży 3 elementy na każdej linii -->
+                        <UniformGrid Columns="3" HorizontalAlignment="Center" VerticalAlignment="Top" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>

@@ -35,8 +35,7 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
-                <RowDefinition Height="177*"/>
-                <RowDefinition Height="443*"/>
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <!-- Tytuł -->
