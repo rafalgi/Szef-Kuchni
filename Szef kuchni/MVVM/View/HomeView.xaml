@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="1000">
     <Grid>
-        <!-- Dodanie tytułu "Popularne" w lewym górnym rogu -->
+        
         <TextBlock Text="Popularne"
                    FontSize="40"
                    HorizontalAlignment="Left"
@@ -15,48 +15,64 @@
                    Margin="20,0,0,0"
                    FontFamily="/Fonts/#Cinzel" />
 
-        <!-- Główna zawartość poniżej -->
         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,70,0,0">
             <ItemsControl ItemsSource="{Binding Recipes}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Transparent" 
-                                BorderThickness="1" 
-                                Margin="10" 
-                                Padding="15" 
-                                Width="300" 
-                                Height="380">
-                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center">
-                                <Image Source="{Binding FullImagePath}" 
-                                       Width="280" 
-                                       Height="250" 
-                                       Stretch="UniformToFill" 
-                                       Margin="0,0,0,10"/>
-                                <TextBlock Text="{Binding Title}" 
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"
-                                           FontWeight="Bold"
-                                           FontSize="18" 
-                                           TextAlignment="Center"
-                                           TextWrapping="Wrap" 
-                                           TextTrimming="CharacterEllipsis" 
-                                           Height="60"/>
-                                <TextBlock Text="{Binding PrepTime, StringFormat='{}{0} minut'}" 
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"
-                                           FontWeight="Light"
-                                           FontSize="16" 
-                                           TextAlignment="Center"
-                                           TextWrapping="Wrap" 
-                                           TextTrimming="CharacterEllipsis" 
-                                           Margin="5,0,5,0"/>
-                            </StackPanel>
+                      
+                        <!-- ramka otaczajaca cały przepis-->
+                        <Border BorderBrush="#F5EFE3"
+                                BorderThickness="2"
+                                CornerRadius="10"
+                                Margin="10"
+                                Background="#F5EFE3">
+                         
+                            <Button Command="{Binding DataContext.OpenRecipeCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding Id}"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch">
+
+
+          
+                                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center">
+             
+                                    <Image Source="{Binding FullImagePath}"
+                                           Width="280"
+                                           Height="250"
+                                           Stretch="UniformToFill"
+                                           Margin="0,0,0,10"
+                                           ClipToBounds="True"/>
+                           
+                                    <TextBlock Text="{Binding Title}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               FontWeight="Bold"
+                                               FontSize="18"
+                                               TextAlignment="Center"
+                                               TextWrapping="Wrap"
+                                               TextTrimming="CharacterEllipsis"
+                                               Height="50"
+                                               Foreground="#4B3621"/>
+    
+                                    <TextBlock Text="{Binding PrepTime, StringFormat='Czas przygotowania: {0} minut'}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               FontWeight="Light"
+                                               FontSize="16"
+                                               TextAlignment="Center"
+                                               TextWrapping="Wrap"
+                                               TextTrimming="CharacterEllipsis"
+                                               Margin="5,0,5,0"
+                                               Foreground="#7A6A58"/>
+                                </StackPanel>
+                            </Button>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <!-- Zmieniamy WrapPanel na UniformGrid, który automatycznie rozłoży 3 elementy na każdej linii -->
                         <UniformGrid Columns="3" HorizontalAlignment="Center" VerticalAlignment="Top" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
@@ -64,3 +80,4 @@
         </ScrollViewer>
     </Grid>
 </UserControl>
+

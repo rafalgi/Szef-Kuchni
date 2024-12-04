@@ -2,27 +2,27 @@
 using System.Windows.Input;
 using Szef_kuchni.Core;
 using System;
+using Szef_kuchni.MVVM.View;
 
 
 namespace Szef_kuchni.MVVM.ViewModel
 {
     internal class MainViewModel : ObservableObject
     {
-        // Komendy aplikacji
         public ICommand CloseAppCommand { get; }
         public ICommand MinimizeAppCommand { get; }
+        public ICommand OpenRecipeCommand { get; }
         public RelayCommand HomeViewCommand { get; set; }
         public RelayCommand FavouriteViewCommand { get; set; }
         public RelayCommand SearchViewCommand { get; set; }
         public RelayCommand HistoryViewCommand { get; set; }
 
-        // ViewModels
         public HomeViewModel HomeVM { get; set; }
         public FavouriteViewModel FavouriteVM { get; set; }
         public SearchViewModel SearchVM { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
 
-        // Aktualnie wyświetlany widok
+        // aktualnie wyświetlany widok
         private object _currentView;
         public object CurrentView
         {
@@ -34,7 +34,6 @@ namespace Szef_kuchni.MVVM.ViewModel
             }
         }
 
-        // Wybrany obraz
         private string _selectedImage;
         public string SelectedImage
         {
@@ -46,35 +45,47 @@ namespace Szef_kuchni.MVVM.ViewModel
             }
         }
 
-        // Konstruktor
+        //konstruktor
         public MainViewModel()
         {
-            // Inicjalizacja ViewModels
             HomeVM = new HomeViewModel();
             FavouriteVM = new FavouriteViewModel();
             SearchVM = new SearchViewModel();
             HistoryViewModel = new HistoryViewModel();
             CurrentView = HomeVM;
 
-            // Inicjalizacja komend
             HomeViewCommand = new RelayCommand(o => CurrentView = HomeVM);
             FavouriteViewCommand = new RelayCommand(o => CurrentView = FavouriteVM);
             SearchViewCommand = new RelayCommand(o => CurrentView = SearchVM);
             HistoryViewCommand = new RelayCommand(o => CurrentView = HistoryViewModel);
             CloseAppCommand = new RelayCommand(ExecuteCloseApp);
             MinimizeAppCommand = new RelayCommand(ExecuteMinimizeApp);
+
+            OpenRecipeCommand = new RelayCommand(OpenRecipe);
         }
 
-        // Metoda do zamknięcia aplikacji
+        // zamykanie aplikacji na X
         private void ExecuteCloseApp(object obj)
         {
             Application.Current.Shutdown();
         }
 
-        // Metoda do minimalizacji okna
+        // minimalizacja aplikacji na -
         private void ExecuteMinimizeApp(object obj)
         {
             Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        }
+        // otwarcie nowego okna z dokładniejszym przepisem
+        private void OpenRecipe(object parameter)
+        {
+            if (parameter is int recipeId)
+            {
+                CurrentView = new RecipeDetailsWindow(recipeId);
+            }
+            else
+            {
+                MessageBox.Show("Nie udało się rozpoznać ID przepisu.");  // sprawdzenie 
+            }
         }
     }
 }

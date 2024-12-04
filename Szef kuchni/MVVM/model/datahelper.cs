@@ -47,11 +47,11 @@ internal class Datahelper
             }
         }
 
-        // Losowo wybierz 9 przepisów
-        var random = new Random();
-        var randomRecipes = new ObservableCollection<Recipe>(recipes.OrderBy(x => random.Next()).Take(9));
+        var topRatedRecipes = new ObservableCollection<Recipe>(
+           recipes.OrderByDescending(x => x.RatingCount).Take(12)
+       );
 
-        return randomRecipes;
+        return topRatedRecipes;
     }
 
     public ObservableCollection<Category> LoadCategories()
@@ -141,18 +141,19 @@ internal class Datahelper
 
         return ingredients;
     }
-
-    public ObservableCollection<Step> LoadSteps()
+    // loadsteps ale z konstruktorem parametrycznym, bo muszę pobrać z konkretnego przepisu
+    public ObservableCollection<Step> LoadSteps(int recipeId)
     {
         var steps = new ObservableCollection<Step>();
 
         using (var connection = new SQLiteConnection(_connectionString))
         {
             connection.Open();
-
-            string query = "SELECT Id, RecipeId, StepNumber, Description FROM steps";
+            string query = "SELECT id, recipe_id, step_number, step_text FROM steps WHERE recipe_id = @RecipeId ORDER BY step_number";
             using (var command = new SQLiteCommand(query, connection))
             {
+                command.Parameters.AddWithValue("@RecipeId", recipeId);
+
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -170,6 +171,45 @@ internal class Datahelper
             }
         }
 
+
         return steps;
     }
+
+    // również konstruktor parametryczny (chce pobrać zdjecie) 
+    public Recipe LoadRecipeById(int recipeId)
+    {
+        using (var connection = new SQLiteConnection(_connectionString))
+        {
+            connection.Open();
+            string query = "SELECT id, title, servings, difficulty, prep_time, description, steps_num, rating, rating_count, save_path FROM recipes WHERE id = @RecipeId";
+            using (var command = new SQLiteCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@RecipeId", recipeId);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Recipe
+                        {
+                            Id = reader.GetInt32(0),
+                            Title = reader.GetString(1),
+                            Servings = reader.GetString(2),
+                            Difficulty = reader.GetString(3),
+                            PrepTime = reader.GetInt32(4),
+                            Description = reader.GetString(5),
+                            Steps = reader.GetInt32(6),
+                            Rating = reader.GetFloat(7),
+                            RatingCount = reader.GetInt32(8),
+                            SavePath = reader.GetString(9) 
+                        };
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
 }
+
+

@@ -2,26 +2,25 @@ using System;
 
 public class Recipe
 {
-    // Klasa reprezentuj¹ca przepis
     public int Id { get; set; }
-    public string Title { get; set; }        // Tytu³ przepisu
+    public string Title { get; set; }        
 
-    public string Servings { get; set; }     // Liczba porcji
+    public string Servings { get; set; }     
 
-    public string Difficulty { get; set; }   // Poziom trudnoœci
+    public string Difficulty { get; set; }   
 
-    public int PrepTime { get; set; }        // Czas przygotowania w minutach
+    public int PrepTime { get; set; }        
 
-    public string Description { get; set; }  // Opis przepisu
+    public string Description { get; set; }  
 
-    public int Steps { get; set; }           // Liczba kroków
+    public int Steps { get; set; }           
 
-    public float Rating { get; set; }        // Ocena przepisu (nullable)
+    public float Rating { get; set; }        
 
-    public int RatingCount { get; set; }     // Liczba ocen (nullable)
+    public int RatingCount { get; set; }     
 
 
-    public string SavePath { get; set; }     // Œcie¿ka do obrazu
+    public string SavePath { get; set; }    
 
 
     public string FullImagePath
