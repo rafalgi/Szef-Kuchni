@@ -112,7 +112,7 @@ internal class Datahelper
         return tags;
     }
 
-    public ObservableCollection<Ingredient> LoadIngredients()
+    public ObservableCollection<Ingredient> LoadIngredients(int recipeId)
     {
         var ingredients = new ObservableCollection<Ingredient>();
 
@@ -120,9 +120,10 @@ internal class Datahelper
         {
             connection.Open();
 
-            string query = "SELECT Id, Name, Quantity FROM ingredients";
+            string query = "SELECT Id, Ingredient FROM ingredients WHERE recipe_id = @RecipeId";
             using (var command = new SQLiteCommand(query, connection))
             {
+                command.Parameters.AddWithValue("@RecipeId", recipeId);
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -130,8 +131,7 @@ internal class Datahelper
                         var ingredient = new Ingredient
                         {
                             Id = reader.GetInt32(0),
-                            Name = reader.GetString(1),
-                            Quantity = reader.GetString(2)
+                            Ingredients = reader.GetString(1),
                         };
                         ingredients.Add(ingredient);
                     }

@@ -24,5 +24,10 @@ namespace Szef_kuchni
         {
             InitializeComponent();
         }
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            this.DragMove();
+        }
     }
 }

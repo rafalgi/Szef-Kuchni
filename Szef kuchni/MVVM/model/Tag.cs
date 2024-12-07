@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Szef_kuchni.MVVM.Model
 {
-    public class Tag
+    internal class Tag
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -7,6 +7,24 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Button Command="{Binding GoBackCommand}" Background="Transparent" BorderThickness="0" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Images_mainView/back_arrow.png" Width="32" Height="24" Margin="5"/>
+                    <TextBlock Text="Wstecz" VerticalAlignment="Center" FontSize="20" FontFamily="/Fonts/#Poppins" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
     </Grid>
 </UserControl>
