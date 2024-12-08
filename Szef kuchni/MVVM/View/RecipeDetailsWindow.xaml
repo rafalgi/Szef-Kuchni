@@ -111,24 +111,44 @@
             </StackPanel>
         </ScrollViewer>
 
-        <!-- Eksport do PDF -->
-        <StackPanel Grid.Row="3" Grid.ColumnSpan="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-            <Button Command="{Binding ExportToPDFCommand}" Background="Transparent" BorderThickness="0" Margin="5">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="/Images_mainView/pdf_icon.png" Width="32" Height="24" Margin="5"/>
-                    <TextBlock Text="Eksportuj do PDF" VerticalAlignment="Center" FontSize="20" FontFamily="/Fonts/#Poppins" />
-                </StackPanel>
-            </Button>
-        </StackPanel>
+        <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="10" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <!-- Lewa strona -->
+                <ColumnDefinition Width="*" />
+                <!-- Prawa strona -->
+            </Grid.ColumnDefinitions>
 
-        <!-- Przyciski "Gotuj" -->
-        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-            <Button Command="{Binding StartCookingCommand}" Background="Transparent" BorderThickness="0" Margin="5">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Gotuj" VerticalAlignment="Center" FontSize="20" FontFamily="/Fonts/#Poppins" />
-                    <Image Source="/Images_mainView/cooking_icon.png" Width="34" Height="34" Margin="5"/>
-                </StackPanel>
-            </Button>
-        </StackPanel>
+            <!-- Przyciski po lewej stronie -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                <!-- Składniki -->
+                <Button Command="{Binding ShowIngredientsCommand}" Background="Transparent" BorderThickness="0" Margin="10,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images_mainView/ingredients_icon.png" Width="32" Height="24" Margin="5"/>
+                        <TextBlock Text="Składniki" VerticalAlignment="Center" FontSize="20" FontFamily="/Fonts/#Poppins" />
+                    </StackPanel>
+                </Button>
+
+                <!-- Eksport do PDF -->
+                <Button Command="{Binding ExportToPDFCommand}" Background="Transparent" BorderThickness="0" Margin="10,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images_mainView/pdf_icon.png" Width="32" Height="24" Margin="5"/>
+                        <TextBlock Text="Eksportuj do PDF" VerticalAlignment="Center" FontSize="20" FontFamily="/Fonts/#Poppins" />
+                    </StackPanel>
+                </Button>
+                
+            </StackPanel>
+
+            <!-- Przycisk po prawej stronie -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <!-- Gotuj -->
+                <Button Command="{Binding StartCookingCommand}" Background="Transparent" BorderThickness="0" Margin="10,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Gotuj" VerticalAlignment="Center" FontSize="20" FontFamily="/Fonts/#Poppins" />
+                        <Image Source="/Images_mainView/cooking_icon.png" Width="34" Height="34" Margin="5"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
