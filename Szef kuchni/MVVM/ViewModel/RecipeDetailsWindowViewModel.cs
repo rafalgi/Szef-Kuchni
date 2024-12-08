@@ -97,9 +97,10 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
     {
         if (_ingredientsWindow == null || !_ingredientsWindow.IsVisible)
         {
+            // Przekazujemy tytuł do IngredientsWindowViewModel
             _ingredientsWindow = new IngredientsWindow
             {
-                DataContext = new IngredientsWindowViewModel(Ingredients)
+                DataContext = new IngredientsWindowViewModel(Ingredients, Title)  // Przekazujemy tytuł przepisu
             };
             _ingredientsWindow.Show();
         }

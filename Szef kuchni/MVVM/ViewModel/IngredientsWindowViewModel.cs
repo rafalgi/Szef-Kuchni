@@ -15,10 +15,21 @@ namespace Szef_kuchni.MVVM.ViewModel
     {
         public ObservableCollection<Ingredient> Ingredients { get; }
 
-        public IngredientsWindowViewModel(ObservableCollection<Ingredient> ingredients)
+        private string _title;
+        public string Title
         {
-            Ingredients = ingredients;
+            get => _title;
+            set
+            {
+                _title = value;
+                OnPropertyChanged();
+            }
         }
 
+        public IngredientsWindowViewModel(ObservableCollection<Ingredient> ingredients, string title)
+        {
+            Ingredients = ingredients;
+            Title = title;
+        }
     }
 }
