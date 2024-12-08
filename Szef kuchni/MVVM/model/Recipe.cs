@@ -1,6 +1,6 @@
 using System;
 
-public class Recipe
+internal class Recipe
 {
     public int Id { get; set; }
     public string Title { get; set; }        

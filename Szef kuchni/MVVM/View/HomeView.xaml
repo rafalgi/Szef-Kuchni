@@ -55,7 +55,8 @@
                                                TextTrimming="CharacterEllipsis"
                                                Height="50"
                                                Foreground="#4B3621"/>
-    
+                                    
+                            
                                     <TextBlock Text="{Binding PrepTime, StringFormat='Czas przygotowania: {0} minut'}"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Center"
@@ -66,6 +67,18 @@
                                                TextTrimming="CharacterEllipsis"
                                                Margin="5,0,5,0"
                                                Foreground="#7A6A58"/>
+
+                                    <TextBlock Text="{Binding Difficulty, StringFormat='Trudność: {0}'}"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                FontWeight="Light"
+                                                FontSize="16"
+                                                TextAlignment="Center"
+                                                TextWrapping="Wrap"
+                                                TextTrimming="CharacterEllipsis"
+                                                Margin="5,0,5,0"
+                                                Foreground="#7A6A58"/>
+                                    
                                 </StackPanel>
                             </Button>
                         </Border>

@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Szef_kuchni.MVVM.Model
 {
-    public class Ingredient
+    internal class Ingredient
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Quantity { get; set; }
+        public string Ingredients { get; set; }
     }
 }

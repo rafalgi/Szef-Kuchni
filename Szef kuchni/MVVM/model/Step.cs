@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Szef_kuchni.MVVM.Model
 {
-    public class Step
+    internal class Step
     {
         public int Id { get; set; }
         public int RecipeId { get; set; }

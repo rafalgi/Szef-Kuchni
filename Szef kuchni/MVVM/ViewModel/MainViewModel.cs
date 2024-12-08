@@ -87,5 +87,6 @@ namespace Szef_kuchni.MVVM.ViewModel
                 MessageBox.Show("Nie udało się rozpoznać ID przepisu.");  // sprawdzenie 
             }
         }
+
     }
 }

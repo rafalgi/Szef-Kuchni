@@ -14,12 +14,12 @@
         ResizeMode="NoResize"
         Background="Transparent"
         AllowsTransparency="True">
-
+    
     <Window.DataContext>
         <viewModel:MainViewModel/>
     </Window.DataContext>
 
-    <Border CornerRadius="30">
+    <Border CornerRadius="30" >
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                 <GradientStop Color="#F1E3C6" Offset="0.0" />
