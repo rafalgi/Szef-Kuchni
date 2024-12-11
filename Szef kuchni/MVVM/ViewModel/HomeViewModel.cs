@@ -33,7 +33,7 @@ namespace Szef_kuchni.MVVM.ViewModel
         private void LoadRecipes()
         {
 
-            _allRecipes = _dataHelper.LoadRecipes();
+            _allRecipes = _dataHelper.LoadRecipesTopRated();
             Recipes = new ObservableCollection<Recipe>(_allRecipes);
         }
 

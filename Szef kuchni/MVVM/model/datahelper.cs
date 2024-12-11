@@ -13,7 +13,7 @@ internal class Datahelper
         _connectionString = $"Data Source={dbPath}";
     }
 
-    public ObservableCollection<Recipe> LoadRecipes()
+    public ObservableCollection<Recipe> LoadRecipesTopRated()
     {
         var recipes = new ObservableCollection<Recipe>();
 
@@ -52,6 +52,42 @@ internal class Datahelper
        );
 
         return topRatedRecipes;
+    }
+
+    public ObservableCollection<Recipe> LoadRecipes()
+    {
+        var recipes = new ObservableCollection<Recipe>();
+
+        using (var connection = new SQLiteConnection(_connectionString))
+        {
+            connection.Open();
+
+            string query = "SELECT Id, Title, Servings, Difficulty, prep_time, Description, Steps_num, Rating, rating_count, save_path FROM recipes LIMIT 100";
+            using (var command = new SQLiteCommand(query, connection))
+            {
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var recipe = new Recipe
+                        {
+                            Id = reader.GetInt32(0),
+                            Title = reader.GetString(1),
+                            Servings = reader.GetString(2),
+                            Difficulty = reader.GetString(3),
+                            PrepTime = reader.GetInt32(4),
+                            Description = reader.GetString(5),
+                            Steps = reader.GetInt32(6),
+                            Rating = reader.IsDBNull(7) ? 0 : reader.GetFloat(7),
+                            RatingCount = reader.IsDBNull(8) ? 0 : reader.GetInt32(8),
+                            SavePath = reader.GetString(9)
+                        };
+                        recipes.Add(recipe);
+                    }
+                }
+            }
+        }
+        return recipes;
     }
 
     public ObservableCollection<Category> LoadCategories()
