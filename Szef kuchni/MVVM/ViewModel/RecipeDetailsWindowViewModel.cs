@@ -12,6 +12,8 @@ using System.Windows.Documents;
 using System.Xml.Linq;
 using System;
 using iText.Kernel.Font;
+using System.Windows.Controls;
+using System.Diagnostics;
 
 internal class RecipeDetailsWindowViewModel : ObservableObject
 {
@@ -145,7 +147,6 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
     {
         try
         {
-            // Ścieżka zapisu pliku PDF
             string outputPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{Title}.pdf");
 
             // Tworzenie dokumentu PDF
@@ -153,14 +154,17 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
             using (Document doc = new Document(PageSize.A4))
             using (PdfWriter writer = PdfWriter.GetInstance(doc, fs))
             {
+                var backgroundColor = new BaseColor(240, 240, 220); // Jasny kolor przypominający papier
+                writer.PageEvent = new PdfBackgroundHelper(backgroundColor);
+
                 doc.Open();
 
                 // Ładowanie czcionki TrueType, która obsługuje polskie znaki (np. Arial)
                 string fontPath = @"C:\Windows\Fonts\arial.ttf"; // Ścieżka do czcionki Arial
-                BaseFont baseFont1 = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                var font1 = new Font(baseFont1, 15, Font.BOLD);  // Pogrubiona czcionka
 
-                // Czcionka 2 bez pogrubienia
+                BaseFont baseFont1 = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                var font1 = new Font(baseFont1, 15, Font.BOLD);
+
                 BaseFont baseFont2 = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                 var font2 = new Font(baseFont2, 12);
 
@@ -171,7 +175,7 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
                 var font4 = new Font(baseFont2, 12, Font.BOLD);
 
                 BaseFont baseFont5 = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                var font5 = new Font(baseFont1, 18, Font.BOLD);  // Pogrubiona czcionka
+                var font5 = new Font(baseFont1, 18, Font.BOLD);
 
                 // Dodaj tytuł
                 doc.Add(new iTextSharp.text.Paragraph(Title, font5) { Alignment = iTextSharp.text.Element.ALIGN_CENTER });
@@ -193,6 +197,60 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
                 paragraph2.Add(difficulty);
 
                 doc.Add(paragraph2);
+                doc.Add(Chunk.NEWLINE);
+
+                // Dodaj obrazek (jeśli istnieje)
+                if (RecipeImagePath.StartsWith("pack://"))
+                {
+                    try
+                    {
+                        Uri imageUri = new Uri(RecipeImagePath, UriKind.Absolute);
+                        var streamResourceInfo = Application.GetResourceStream(imageUri);
+
+                        if (streamResourceInfo != null)
+                        {
+                            // Wczytaj obraz ze strumienia
+                            using (var resourceStream = streamResourceInfo.Stream)
+                            {
+                                // Zapisywanie pliku tymczasowego
+                                string tempFilePath = Path.GetTempFileName();
+                                using (var fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
+                                {
+                                    resourceStream.CopyTo(fileStream);
+                                }
+
+                                // Załaduj obraz z tymczasowej ścieżki
+                                iTextSharp.text.Image recipeImage = iTextSharp.text.Image.GetInstance(tempFilePath);
+
+                                // Skalowanie obrazu
+                                float maxWidth = 250f;
+                                float maxHeight = 250f;
+
+                                float ratio = Math.Min(maxWidth / recipeImage.Width, maxHeight / recipeImage.Height);
+                                recipeImage.ScalePercent(ratio * 100);
+
+                                recipeImage.Alignment = iTextSharp.text.Image.ALIGN_LEFT;
+                                doc.Add(recipeImage);
+                                doc.Add(Chunk.NEWLINE);
+
+                                // Usuń plik tymczasowy (opcjonalnie)
+                                File.Delete(tempFilePath);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Nie można załadować obrazu z URI: {RecipeImagePath}", "Błąd obrazu", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Wystąpił błąd podczas wczytywania obrazu: {ex.Message}\nŚcieżka: {RecipeImagePath}", "Błąd obrazu", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"Ścieżka do obrazu nie zaczyna się od 'pack://': {RecipeImagePath}", "Błąd ścieżki", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
 
                 // Dodaj składniki
                 doc.Add(new iTextSharp.text.Paragraph("\nSkładniki:", font1));
@@ -216,17 +274,35 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
                     doc.Add(Chunk.NEWLINE);
                 }
 
-
-
-
                 doc.Close();
             }
 
-            MessageBox.Show($"PDF został zapisany na pulpicie: {outputPath}", "Eksport zakończony", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show($"Przepis został zapisany jako PDF na pulpicie: {outputPath}", "Eksport zakończony", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
             MessageBox.Show($"Wystąpił błąd podczas eksportu: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
+    public class PdfBackgroundHelper : PdfPageEventHelper
+    {
+        private readonly BaseColor _backgroundColor;
+
+        public PdfBackgroundHelper(BaseColor backgroundColor)
+        {
+            _backgroundColor = backgroundColor;
+        }
+
+        public override void OnEndPage(PdfWriter writer, Document document)
+        {
+            // Dodawanie tła do każdej strony
+            PdfContentByte canvas = writer.DirectContentUnder;
+            Rectangle background = new Rectangle(document.PageSize);
+            background.BackgroundColor = _backgroundColor;
+            background.Border = Rectangle.NO_BORDER;
+            canvas.Rectangle(background);
+        }
+    }
+
 }
