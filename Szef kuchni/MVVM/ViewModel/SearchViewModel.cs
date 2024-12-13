@@ -12,26 +12,24 @@ namespace Szef_kuchni.MVVM.ViewModel
 {
     internal class SearchViewModel
     {
-        public ObservableCollection<Recipe> Recipes { get; set; }
+        public ObservableCollection<Recipe> AllRecipes { get; set; }
         private ObservableCollection<Recipe> _allRecipes;
-
         private readonly Datahelper _dataHelper;
+
 
         public SearchViewModel()
         {
-            Recipes = new ObservableCollection<Recipe>();
-
-            string dbPath = @"../../recipes.db"; // ścieżka do bazy danych
+            AllRecipes = new ObservableCollection<Recipe>();
+            string dbPath = @"../../recipes.db";
             _dataHelper = new Datahelper(dbPath);
-
-            LoadRecipes();
+            LoadAllRecipes();
         }
 
-        private void LoadRecipes()
+        private void LoadAllRecipes()
         {
 
             _allRecipes = _dataHelper.LoadRecipes();
-            Recipes = new ObservableCollection<Recipe>(_allRecipes);
+            AllRecipes = new ObservableCollection<Recipe>(_allRecipes);
         }
 
     }

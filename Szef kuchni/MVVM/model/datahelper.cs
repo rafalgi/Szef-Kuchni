@@ -62,7 +62,7 @@ internal class Datahelper
         {
             connection.Open();
 
-            string query = "SELECT Id, Title, Servings, Difficulty, prep_time, Description, Steps_num, Rating, rating_count, save_path FROM recipes LIMIT 102";
+            string query = "SELECT Id, Title, Servings, Difficulty, prep_time, Description, Steps_num, Rating, rating_count, save_path FROM recipes LIMIT 700";
             using (var command = new SQLiteCommand(query, connection))
             {
                 using (var reader = command.ExecuteReader())

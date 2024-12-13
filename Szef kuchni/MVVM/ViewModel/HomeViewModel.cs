@@ -9,35 +9,29 @@ namespace Szef_kuchni.MVVM.ViewModel
 {
     internal class HomeViewModel : ObservableObject
     {
-
-
-        public ObservableCollection<Recipe> Recipes { get; set; }
-        private ObservableCollection<Recipe> _allRecipes;
+        public ObservableCollection<Recipe> TopRatedRecipes { get; set; }
+        private ObservableCollection<Recipe> _topRatedRecipes;
 
         private readonly Datahelper _dataHelper;
 
         // konstruktor
         public HomeViewModel()
         {
-            
-            Recipes = new ObservableCollection<Recipe>();
+            TopRatedRecipes = new ObservableCollection<Recipe>();
 
             string dbPath = @"../../recipes.db"; // ścieżka do bazy danych
             _dataHelper = new Datahelper(dbPath);
 
-            LoadRecipes();
-
+            LoadTopRatedRecipes();
         }
 
         
-        private void LoadRecipes()
+        private void LoadTopRatedRecipes()
         {
 
-            _allRecipes = _dataHelper.LoadRecipesTopRated();
-            Recipes = new ObservableCollection<Recipe>(_allRecipes);
+            _topRatedRecipes = _dataHelper.LoadRecipesTopRated();
+            TopRatedRecipes = new ObservableCollection<Recipe>(_topRatedRecipes);
         }
-
-
 
     }
 }
