@@ -25,12 +25,19 @@ namespace Szef_kuchni.MVVM.ViewModel
             LoadTopRatedRecipes();
         }
 
-        
+
         private void LoadTopRatedRecipes()
         {
+            // Załaduj wszystkie przepisy
+            _topRatedRecipes = _dataHelper.LoadRecipes();
 
-            _topRatedRecipes = _dataHelper.LoadRecipesTopRated();
-            TopRatedRecipes = new ObservableCollection<Recipe>(_topRatedRecipes);
+            // Posortuj przepisy według RatingCount malejąco i weź pierwsze 15
+            var limitedRecipes = _topRatedRecipes
+                .OrderByDescending(recipe => recipe.RatingCount) // Sortowanie malejące po RatingCount
+                .Take(12); // Wybierz pierwsze 15 elementów
+
+            // Przypisz do ObservableCollection
+            TopRatedRecipes = new ObservableCollection<Recipe>(limitedRecipes);
         }
 
     }
