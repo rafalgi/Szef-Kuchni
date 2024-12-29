@@ -13,6 +13,17 @@ namespace Szef_kuchni.MVVM.ViewModel
         private ObservableCollection<Recipe> _topRatedRecipes;
 
         private readonly Datahelper _dataHelper;
+        private int _columnCount;
+
+        public int ColumnCount
+        {
+            get => _columnCount;
+            set
+            {
+                _columnCount = value;
+                OnPropertyChanged();
+            }
+        }
 
         // konstruktor
         public HomeViewModel()
@@ -28,16 +39,27 @@ namespace Szef_kuchni.MVVM.ViewModel
 
         private void LoadTopRatedRecipes()
         {
-            // Załaduj wszystkie przepisy
             _topRatedRecipes = _dataHelper.LoadRecipes();
 
-            // Posortuj przepisy według RatingCount malejąco i weź pierwsze 15
-            var limitedRecipes = _topRatedRecipes
-                .OrderByDescending(recipe => recipe.RatingCount) // Sortowanie malejące po RatingCount
-                .Take(12); // Wybierz pierwsze 15 elementów
 
-            // Przypisz do ObservableCollection
+            var limitedRecipes = _topRatedRecipes
+                .OrderByDescending(recipe => recipe.RatingCount) 
+                .Take(15); 
+
+
             TopRatedRecipes = new ObservableCollection<Recipe>(limitedRecipes);
+        }
+
+        public void SetColumnCount(double windowWidth)
+        {
+            if (windowWidth > 1200)
+            {
+                ColumnCount = 5;
+            }
+            else
+            {
+                ColumnCount = 3;
+            }
         }
 
     }

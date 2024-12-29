@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using iText.Layout.Element;
 using Szef_kuchni.Core;
 
 namespace Szef_kuchni.MVVM.ViewModel
@@ -15,7 +11,9 @@ namespace Szef_kuchni.MVVM.ViewModel
     {
         private ObservableCollection<Recipe> _allRecipes;
         private ObservableCollection<Recipe> _allRecipes2;
-        public  ObservableCollection<Recipe> AllRecipes
+        private int _columnCount;
+
+        public ObservableCollection<Recipe> AllRecipes
         {
             get => _allRecipes;
             set
@@ -25,10 +23,20 @@ namespace Szef_kuchni.MVVM.ViewModel
             }
         }
 
+        public int ColumnCount
+        {
+            get => _columnCount;
+            set
+            {
+                _columnCount = value;
+                OnPropertyChanged();
+            }
+        }
+
         private int _numberOfRecipes;
         private readonly Datahelper _dataHelper;
         private int _currentPage;
-        private const int RecipesPerPage = 12;
+        private const int RecipesPerPage = 15;
 
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
@@ -46,7 +54,6 @@ namespace Szef_kuchni.MVVM.ViewModel
 
             LoadAllRecipes();
         }
-
 
         private void LoadAllRecipes()
         {
@@ -86,5 +93,17 @@ namespace Szef_kuchni.MVVM.ViewModel
             return _currentPage > 0;
         }
 
+
+        public void SetColumnCount(double windowWidth)
+        {
+            if (windowWidth > 1200)
+            {
+                ColumnCount = 5;
+            }
+            else
+            {
+                ColumnCount = 3;
+            }
+        }
     }
 }

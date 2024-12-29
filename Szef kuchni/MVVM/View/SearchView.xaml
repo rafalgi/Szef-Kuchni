@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
 
-        <!-- Nagłówek -->
+
         <TextBlock Text="Wszystkie przepisy"
                 FontSize="40"
                 HorizontalAlignment="Left"
@@ -16,7 +16,6 @@
                 Margin="20,0,0,0"
                 FontFamily="/Fonts/#Cinzel" />
 
-        <!-- Lista przepisów -->
         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,70,0,70">
             <ItemsControl ItemsSource="{Binding AllRecipes}">
                 <ItemsControl.ItemTemplate>
@@ -76,13 +75,12 @@
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="3" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                        <UniformGrid Columns="{Binding ColumnCount}" HorizontalAlignment="Center" VerticalAlignment="Top" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
 
-        <!-- Przyciski nawigacji -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10">
             <Button Content="Poprzednia strona"
                     Command="{Binding PreviousPageCommand}"

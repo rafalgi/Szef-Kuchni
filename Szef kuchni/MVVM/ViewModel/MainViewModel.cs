@@ -12,7 +12,8 @@ namespace Szef_kuchni.MVVM.ViewModel
         public ICommand MinimizeAppCommand { get; }
         public ICommand OpenRecipeCommand { get; }
         public ICommand GoBackCommand { get; }
-        
+        public ICommand MaximizeAppCommand { get; }
+
         public RelayCommand HomeViewCommand { get; set; }
         public RelayCommand FavouriteViewCommand { get; set; }
         public RelayCommand SearchViewCommand { get; set; }
@@ -48,10 +49,10 @@ namespace Szef_kuchni.MVVM.ViewModel
             FavouriteViewCommand = new RelayCommand(o => CurrentView = FavouriteVM);
             SearchViewCommand = new RelayCommand(o => CurrentView = SearchVM);
             HistoryViewCommand = new RelayCommand(o => CurrentView = HistoryViewModel);
-            
+
             CloseAppCommand = new RelayCommand(ExecuteCloseApp);
             MinimizeAppCommand = new RelayCommand(ExecuteMinimizeApp);
-            
+            MaximizeAppCommand = new RelayCommand(ExecuteMaximizeApp);
             OpenRecipeCommand = new RelayCommand(OpenRecipe);
             GoBackCommand = new RelayCommand(GoBack);
         }
@@ -66,11 +67,22 @@ namespace Szef_kuchni.MVVM.ViewModel
             Application.Current.MainWindow.WindowState = WindowState.Minimized;
         }
 
+        private void ExecuteMaximizeApp(object obj)
+        {
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow != null)
+            {
+                mainWindow.WindowState = mainWindow.WindowState == WindowState.Maximized
+                    ? WindowState.Normal
+                    : WindowState.Maximized;
+            }
+        }
+
         private void OpenRecipe(object parameter)
         {
             if (parameter is int recipeId)
             {
-                _viewHistory.Push(CurrentView); // Zapisz obecny widok
+                _viewHistory.Push(CurrentView); 
                 CurrentView = new RecipeDetailsWindow(recipeId);
             }
             else
@@ -83,7 +95,7 @@ namespace Szef_kuchni.MVVM.ViewModel
         {
             if (_viewHistory.Count > 0)
             {
-                CurrentView = _viewHistory.Pop(); // Pobierz poprzedni widok
+                CurrentView = _viewHistory.Pop(); 
             }
             else
             {
