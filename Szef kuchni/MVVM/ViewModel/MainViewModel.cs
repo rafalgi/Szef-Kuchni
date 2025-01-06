@@ -45,6 +45,11 @@ namespace Szef_kuchni.MVVM.ViewModel
             {
                 _filterText = value;
                 OnPropertyChanged();
+
+                if (HomeVM != null && value is string filterText)
+                {
+                    HomeVM.FilterText = filterText;
+                }
             }
         }
 

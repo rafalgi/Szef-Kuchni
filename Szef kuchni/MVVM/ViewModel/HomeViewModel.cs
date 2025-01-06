@@ -9,11 +9,21 @@ namespace Szef_kuchni.MVVM.ViewModel
 {
     internal class HomeViewModel : ObservableObject
     {
-        public ObservableCollection<Recipe> TopRatedRecipes { get; set; }
-        private ObservableCollection<Recipe> _topRatedRecipes;
-
         private readonly Datahelper _dataHelper;
+        private ObservableCollection<Recipe> AllRecipes;
+        private ObservableCollection<Recipe> _topRatedRecipes;
         private int _columnCount;
+        private object _filterText;
+
+        public ObservableCollection<Recipe> TopRatedRecipes
+        {
+            get => _topRatedRecipes;
+            set
+            {
+                _topRatedRecipes = value;
+                OnPropertyChanged(nameof(TopRatedRecipes));
+            }
+        }
 
         public int ColumnCount
         {
@@ -22,6 +32,17 @@ namespace Szef_kuchni.MVVM.ViewModel
             {
                 _columnCount = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public object FilterText
+        {
+            get => _filterText;
+            set
+            {
+                _filterText = value;
+                OnPropertyChanged();
+                ApplyFilter();
             }
         }
 
@@ -39,10 +60,10 @@ namespace Szef_kuchni.MVVM.ViewModel
 
         private void LoadTopRatedRecipes()
         {
-            _topRatedRecipes = _dataHelper.LoadRecipes();
+            AllRecipes = _dataHelper.LoadRecipes();
 
 
-            var limitedRecipes = _topRatedRecipes
+            var limitedRecipes = AllRecipes
                 .OrderByDescending(recipe => recipe.RatingCount) 
                 .Take(15); 
 
@@ -59,6 +80,27 @@ namespace Szef_kuchni.MVVM.ViewModel
             else
             {
                 ColumnCount = 3;
+            }
+        }
+
+        private void ApplyFilter()
+        {
+            if (string.IsNullOrWhiteSpace(_filterText as string))
+            {
+                var limitedRecipes = AllRecipes
+                    .OrderByDescending(recipe => recipe.RatingCount)
+                    .Take(15);
+
+                TopRatedRecipes = new ObservableCollection<Recipe>(limitedRecipes);
+            }
+            else
+            {
+                var filteredRecipes = AllRecipes
+                    .Where(recipe => recipe.Title.IndexOf(FilterText as string, StringComparison.OrdinalIgnoreCase) >= 0)
+                    .OrderByDescending(recipe => recipe.RatingCount)
+                    .Take(15);
+
+                TopRatedRecipes = new ObservableCollection<Recipe>(filteredRecipes);
             }
         }
 
