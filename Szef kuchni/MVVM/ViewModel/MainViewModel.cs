@@ -49,6 +49,7 @@ namespace Szef_kuchni.MVVM.ViewModel
                 if (HomeVM != null && value is string filterText)
                 {
                     HomeVM.FilterText = filterText;
+                    SearchVM.FilterText = filterText;
                 }
             }
         }

@@ -17,7 +17,7 @@
                 FontFamily="/Fonts/#Cinzel" />
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,70,0,70">
-            <ItemsControl ItemsSource="{Binding AllRecipes}">
+            <ItemsControl ItemsSource="{Binding DisplayedRecipes}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border BorderBrush="#F5EFE3"

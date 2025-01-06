@@ -9,17 +9,30 @@ namespace Szef_kuchni.MVVM.ViewModel
 {
     internal class SearchViewModel : ObservableObject
     {
+        private ObservableCollection<Recipe> _displayedRecipes;
         private ObservableCollection<Recipe> _allRecipes;
-        private ObservableCollection<Recipe> _allRecipes2;
+        private ObservableCollection<Recipe> _filteredRecipes;
         private int _columnCount;
+        private object _filterText;
 
-        public ObservableCollection<Recipe> AllRecipes
+        public ObservableCollection<Recipe> DisplayedRecipes
         {
-            get => _allRecipes;
+            get => _displayedRecipes;
             set
             {
-                _allRecipes = value;
+                _displayedRecipes = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public object FilterText
+        {
+            get => _filterText;
+            set
+            {
+                _filterText = value;
+                OnPropertyChanged();
+                ApplyFilter();
             }
         }
 
@@ -43,7 +56,7 @@ namespace Szef_kuchni.MVVM.ViewModel
 
         public SearchViewModel()
         {
-            AllRecipes = new ObservableCollection<Recipe>();
+            DisplayedRecipes = new ObservableCollection<Recipe>();
             string dbPath = @"../../recipes.db";
             _dataHelper = new Datahelper(dbPath);
 
@@ -57,8 +70,9 @@ namespace Szef_kuchni.MVVM.ViewModel
 
         private void LoadAllRecipes()
         {
-            _allRecipes = _dataHelper.LoadRecipes();
-            _allRecipes2 = _allRecipes;
+            _allRecipes =  _dataHelper.LoadRecipes();
+            _displayedRecipes = _allRecipes;
+            _filteredRecipes = _allRecipes;
             _numberOfRecipes = _allRecipes.Count();
             UpdateDisplayedRecipes();
         }
@@ -66,9 +80,9 @@ namespace Szef_kuchni.MVVM.ViewModel
         private void UpdateDisplayedRecipes()
         {
             var skip = _currentPage * RecipesPerPage;
-            var recipesToShow = _allRecipes2.Skip(skip).Take(RecipesPerPage);
-            AllRecipes = new ObservableCollection<Recipe>(recipesToShow);
-            OnPropertyChanged(nameof(AllRecipes));
+            var recipesToShow = _filteredRecipes.Skip(skip).Take(RecipesPerPage);
+            DisplayedRecipes = new ObservableCollection<Recipe>(recipesToShow);
+            OnPropertyChanged(nameof(DisplayedRecipes));
         }
 
         private void NextPage(object parameter)
@@ -105,5 +119,26 @@ namespace Szef_kuchni.MVVM.ViewModel
                 ColumnCount = 3;
             }
         }
+
+        private void ApplyFilter()
+        {
+            if (string.IsNullOrWhiteSpace(_filterText as string))
+            {
+                var limitedRecipes = _allRecipes;
+
+                _filteredRecipes = new ObservableCollection<Recipe>(limitedRecipes);
+            }
+            else
+            {
+                var limitedRecipes = _allRecipes
+                    .Where(recipe => recipe.Title.IndexOf(FilterText as string, StringComparison.OrdinalIgnoreCase) >= 0);
+
+                _filteredRecipes = new ObservableCollection<Recipe>(limitedRecipes);
+            }
+            _currentPage = 0;
+            _numberOfRecipes = _filteredRecipes.Count();
+            UpdateDisplayedRecipes();
+        }
+
     }
 }
