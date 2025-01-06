@@ -85,7 +85,8 @@
                      HorizontalAlignment="Left"
                      Margin="20"
                      Grid.Column="1"
-                     Style="{StaticResource TextBoxStyle}"/>
+                     Style="{StaticResource TextBoxStyle}"
+                     Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Content="X"
                     Width="30"
                     Height="30"

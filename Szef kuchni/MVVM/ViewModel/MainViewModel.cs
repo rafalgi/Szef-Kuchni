@@ -24,6 +24,7 @@ namespace Szef_kuchni.MVVM.ViewModel
         public SearchViewModel SearchVM { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
 
+        private object _filterText;
         private object _currentView;
         private readonly Stack<object> _viewHistory = new Stack<object>();
 
@@ -33,6 +34,16 @@ namespace Szef_kuchni.MVVM.ViewModel
             set
             {
                 _currentView = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public object FilterText
+        {
+            get => _filterText;
+            set
+            {
+                _filterText = value;
                 OnPropertyChanged();
             }
         }
