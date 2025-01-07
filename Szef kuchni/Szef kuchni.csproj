@@ -1647,9 +1647,7 @@
   <ItemGroup>
     <Resource Include="App Icon.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App Images\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
