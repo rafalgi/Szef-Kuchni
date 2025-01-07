@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using Szef_kuchni.Core;
@@ -27,6 +28,7 @@ namespace Szef_kuchni.MVVM.ViewModel
         private object _filterText;
         private object _currentView;
         private readonly Stack<object> _viewHistory = new Stack<object>();
+        private Datahelper _dataHelper;
 
         public object CurrentView
         {
@@ -50,6 +52,7 @@ namespace Szef_kuchni.MVVM.ViewModel
                 {
                     HomeVM.FilterText = filterText;
                     SearchVM.FilterText = filterText;
+                    HistoryViewModel.FilterText = filterText;
                 }
             }
         }
@@ -61,6 +64,9 @@ namespace Szef_kuchni.MVVM.ViewModel
             SearchVM = new SearchViewModel();
             HistoryViewModel = new HistoryViewModel();
             CurrentView = HomeVM;
+
+            string dbPath = @"../../recipes.db"; // ścieżka do bazy danych
+            _dataHelper = new Datahelper(dbPath);
 
             HomeViewCommand = new RelayCommand(o => CurrentView = HomeVM);
             FavouriteViewCommand = new RelayCommand(o => CurrentView = FavouriteVM);
@@ -99,6 +105,12 @@ namespace Szef_kuchni.MVVM.ViewModel
         {
             if (parameter is int recipeId)
             {
+                if (CurrentView != HistoryViewModel)
+                {
+                    _dataHelper.SaveHistory(recipeId);
+                    _dataHelper.EnsureHistoryLimit();
+                    HistoryViewModel = new HistoryViewModel();
+                }
                 _viewHistory.Push(CurrentView); 
                 CurrentView = new RecipeDetailsWindow(recipeId);
             }

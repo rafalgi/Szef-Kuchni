@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Szef_kuchni.MVVM.ViewModel;
 
 namespace Szef_kuchni.MVVM.View
 {
@@ -23,6 +24,13 @@ namespace Szef_kuchni.MVVM.View
         public HistoryView()
         {
             InitializeComponent();
+            this.SizeChanged += OnWindowSizeChanged;
+        }
+
+        private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var viewModel = (HistoryViewModel)this.DataContext;
+            viewModel.SetColumnCount(e.NewSize.Width);
         }
     }
 }

@@ -90,6 +90,61 @@ internal class Datahelper
         return recipes;
     }
 
+    public ObservableCollection<Recipe> LoadHistoryRecipes()
+    {
+        var recipes = new ObservableCollection<Recipe>();
+
+        using (var connection = new SQLiteConnection(_connectionString))
+        {
+            connection.Open();
+
+            string query = @"
+                SELECT 
+                    r.Id, 
+                    r.Title, 
+                    r.Servings, 
+                    r.Difficulty, 
+                    r.prep_time, 
+                    r.Description, 
+                    r.Steps_num, 
+                    r.Rating, 
+                    r.rating_count, 
+                    r.save_path
+                FROM 
+                    recipes r
+                INNER JOIN 
+                    history h
+                ON 
+                    r.Id = h.recipe_id
+                ORDER BY 
+                    h.view_date DESC";
+            using (var command = new SQLiteCommand(query, connection))
+            {
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var recipe = new Recipe
+                        {
+                            Id = reader.GetInt32(0),
+                            Title = reader.GetString(1),
+                            Servings = reader.GetString(2),
+                            Difficulty = reader.GetString(3),
+                            PrepTime = reader.GetInt32(4),
+                            Description = reader.GetString(5),
+                            Steps = reader.GetInt32(6),
+                            Rating = reader.IsDBNull(7) ? 0 : reader.GetFloat(7),
+                            RatingCount = reader.IsDBNull(8) ? 0 : reader.GetInt32(8),
+                            SavePath = reader.GetString(9)
+                        };
+                        recipes.Add(recipe);
+                    }
+                }
+            }
+        }
+        return recipes;
+    }
+
     public ObservableCollection<Category> LoadCategories()
     {
         var categories = new ObservableCollection<Category>();
@@ -244,6 +299,68 @@ internal class Datahelper
             }
         }
         return null;
+    }
+
+    public void SaveHistory(int recipeId)
+    {
+        using (var connection = new SQLiteConnection(_connectionString))
+        {
+            connection.Open();
+
+            string query = @"
+                INSERT INTO history (recipe_id, view_date)
+                VALUES (@recipe_id, @view_date)";
+
+            using (var command = new SQLiteCommand(query, connection))
+            {
+                // Ustawianie parametrów
+                command.Parameters.AddWithValue("@recipe_id", recipeId);
+
+                // Aktualny czas w formacie Unix
+                int unixTimestamp = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                command.Parameters.AddWithValue("@view_date", unixTimestamp);
+
+                // Wykonanie zapytania
+                command.ExecuteNonQuery();
+            }
+        }
+    }
+
+    public void EnsureHistoryLimit()
+    {
+        int history_limit = 150;
+        using (var connection = new SQLiteConnection(_connectionString))
+        {
+            connection.Open();
+
+            // Sprawdzenie liczby rekordów w tabeli history
+            string countQuery = "SELECT COUNT(*) FROM history";
+            using (var countCommand = new SQLiteCommand(countQuery, connection))
+            {
+                long recordCount = (long)countCommand.ExecuteScalar();
+
+                // Jeśli rekordów jest więcej niż 150, usuń najstarsze
+                if (recordCount > history_limit)
+                {
+                    string deleteQuery = @"
+                    DELETE FROM history
+                    WHERE id IN (
+                        SELECT id FROM history
+                        ORDER BY view_date ASC
+                        LIMIT @excessCount
+                    )";
+
+                    using (var deleteCommand = new SQLiteCommand(deleteQuery, connection))
+                    {
+                        // Obliczanie liczby rekordów do usunięcia
+                        int excessCount = (int)(recordCount - history_limit);
+                        deleteCommand.Parameters.AddWithValue("@excessCount", excessCount);
+
+                        deleteCommand.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
     }
 
 }
