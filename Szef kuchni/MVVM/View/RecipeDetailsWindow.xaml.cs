@@ -26,5 +26,6 @@ namespace Szef_kuchni.MVVM.View
             InitializeComponent();
             this.DataContext = new RecipeDetailsWindowViewModel(recipeId);
         }
+
     }
 }

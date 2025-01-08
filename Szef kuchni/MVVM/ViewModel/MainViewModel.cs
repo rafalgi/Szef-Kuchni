@@ -69,7 +69,11 @@ namespace Szef_kuchni.MVVM.ViewModel
             _dataHelper = new Datahelper(dbPath);
 
             HomeViewCommand = new RelayCommand(o => CurrentView = HomeVM);
-            FavouriteViewCommand = new RelayCommand(o => CurrentView = FavouriteVM);
+            FavouriteViewCommand = new RelayCommand(o =>
+            {
+                FavouriteVM.LoadFavouriteRecipes(); // odśwież ulubione przepisy
+                CurrentView = FavouriteVM;
+            });
             SearchViewCommand = new RelayCommand(o => CurrentView = SearchVM);
             HistoryViewCommand = new RelayCommand(o => CurrentView = HistoryViewModel);
 
@@ -122,9 +126,12 @@ namespace Szef_kuchni.MVVM.ViewModel
 
         private void GoBack(object parameter)
         {
+
             if (_viewHistory.Count > 0)
             {
-                CurrentView = _viewHistory.Pop(); 
+                FavouriteVM.LoadFavouriteRecipes();
+
+                CurrentView = _viewHistory.Pop();
             }
             else
             {

@@ -11,7 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows;
+using System.Windows.Controls;
+using Szef_kuchni.MVVM.ViewModel;
 
 namespace Szef_kuchni.MVVM.View
 {
@@ -23,6 +25,14 @@ namespace Szef_kuchni.MVVM.View
         public FavouriteView()
         {
             InitializeComponent();
+            this.SizeChanged += OnWindowSizeChanged;
         }
+
+        private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var viewModel = (FavouriteViewModel)this.DataContext;
+            viewModel.SetColumnCount(e.NewSize.Width);
+        }
+
     }
 }

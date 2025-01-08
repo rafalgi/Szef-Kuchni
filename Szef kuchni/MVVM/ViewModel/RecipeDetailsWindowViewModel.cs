@@ -8,12 +8,14 @@ using Szef_kuchni.MVVM.ViewModel;
 using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using System.Collections.Generic;
 using System.Windows.Documents;
 using System.Xml.Linq;
 using System;
 using iText.Kernel.Font;
 using System.Windows.Controls;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 internal class RecipeDetailsWindowViewModel : ObservableObject
 {
@@ -23,6 +25,8 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
     public ICommand ExportToPDFCommand { get; }
     public ICommand GoBackCommand { get; }
     public ICommand ShowIngredientsCommand { get; }
+
+    public ICommand AddToFavouriteCommand { get; }
 
     private IngredientsWindow _ingredientsWindow;
 
@@ -89,7 +93,7 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
             OnPropertyChanged();
         }
     }
-
+    //KONSTRUKTOR
     public RecipeDetailsWindowViewModel(int recipeId)
     {
         _dataHelper = new Datahelper(@"../../recipes.db");
@@ -97,7 +101,10 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
         GoBackCommand = new RelayCommand(ExecuteGoBack);
         ShowIngredientsCommand = new RelayCommand(ExecuteShowIngredients);
         ExportToPDFCommand = new RelayCommand(ExecuteExportToPDF);
+        AddToFavouriteCommand = new RelayCommand(AddToFavourite);
+        CheckIfFavourite(recipeId);
     }
+
 
     private void ExecuteGoBack(object obj)
     {
@@ -136,6 +143,7 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
             Title = recipe.Title;
             PrepTime = recipe.PrepTime;
             Difficulty = recipe.Difficulty;
+            RecipeId = recipeId;
         }
         else
         {
@@ -302,6 +310,135 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
             background.BackgroundColor = _backgroundColor;
             background.Border = Rectangle.NO_BORDER;
             canvas.Rectangle(background);
+        }
+    }
+
+    private void AddToFavourite(object parameter)
+    {
+        if (parameter is int recipeId)
+        {
+            try
+            {
+                string favouritesPath = GetFavouritesFilePath();
+
+                var favouriteRecipes = LoadFavourites(favouritesPath);
+
+                if (favouriteRecipes.Contains(recipeId))
+                {
+                    favouriteRecipes.Remove(recipeId);
+                    IsFavourite = false;
+                }
+                else
+                {
+                    favouriteRecipes.Add(recipeId);
+                    IsFavourite = true;
+                }
+
+                SaveFavourites(favouritesPath, favouriteRecipes);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Wystąpił błąd podczas dodawania przepisu do ulubionych: {ex.Message}");
+            }
+        }
+        else
+        {
+            MessageBox.Show("Nieprawidłowy identyfikator przepisu.");
+        }
+    }
+
+    private string GetFavouritesFilePath()
+    {
+        string userDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        string appDirectory = Path.Combine(userDirectory, "SzefKuchni");
+
+
+        if (!Directory.Exists(appDirectory))
+        {
+            Directory.CreateDirectory(appDirectory);
+        }
+
+        return Path.Combine(appDirectory, "Favourites.json");
+    }
+
+    private List<int> LoadFavourites(string filePath)
+    {
+
+        if (File.Exists(filePath))
+        {
+            try
+            {
+                string json = File.ReadAllText(filePath);       
+                return JsonConvert.DeserializeObject<List<int>>(json) ?? new List<int>();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Błąd przy ładowaniu ulubionych: {ex.Message}");
+                return new List<int>(); 
+            }
+        }
+
+
+        return new List<int>();
+    }
+
+    private void SaveFavourites(string filePath, List<int> favourites)
+    {
+        try
+        {
+            string json = JsonConvert.SerializeObject(favourites, Formatting.Indented);
+
+            File.WriteAllText(filePath, json);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Błąd przy zapisywaniu ulubionych: {ex.Message}");
+        }
+    }
+
+    private int _recipeId;
+    public int RecipeId
+    {
+        get => _recipeId;
+        set
+        {
+            _recipeId = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _isFavourite;
+    public bool IsFavourite
+    {
+        get => _isFavourite;
+        set
+        {
+            _isFavourite = value;
+            OnPropertyChanged();
+        }
+    }
+
+
+    private void CheckIfFavourite(int recipeId)
+    {
+        try
+        {
+            string favouritesPath = GetFavouritesFilePath();
+
+            var favouriteRecipes = LoadFavourites(favouritesPath);
+
+            if (favouriteRecipes.Contains(recipeId))
+            {
+                IsFavourite = true;
+            }
+            else
+            {
+                IsFavourite = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Wystąpił błąd podczas sprawdzania ulubionych: {ex.Message}");
         }
     }
 
