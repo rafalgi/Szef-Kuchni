@@ -15,6 +15,7 @@ namespace Szef_kuchni.MVVM.ViewModel
     internal class FavouriteViewModel : ObservableObject
     {
         private ObservableCollection<Recipe> _displayedRecipes;
+        private ObservableCollection<Recipe> _favouriteRecipes;
         private ObservableCollection<Recipe> _filteredRecipes;
         private int _columnCount;
         private object _filterText;
@@ -93,8 +94,10 @@ namespace Szef_kuchni.MVVM.ViewModel
             {
                 var favouriteRecipes = favouriteRecipeIds.Select(id => _dataHelper.LoadRecipeById(id)).Where(recipe => recipe != null).ToList();
 
-                _filteredRecipes = new ObservableCollection<Recipe>(favouriteRecipes);
-                _numberOfRecipes = _filteredRecipes.Count;
+                _favouriteRecipes = new ObservableCollection<Recipe>(favouriteRecipes);
+                _filteredRecipes = _favouriteRecipes;
+                _displayedRecipes = _favouriteRecipes;
+                _numberOfRecipes = _favouriteRecipes.Count;
                 if (_numberOfRecipes % 15 == 0)
                 {
                     BackOnePage();
@@ -105,7 +108,9 @@ namespace Szef_kuchni.MVVM.ViewModel
             }
             else
             {
-                _filteredRecipes = new ObservableCollection<Recipe>();
+                _favouriteRecipes = new ObservableCollection<Recipe>();
+                _filteredRecipes = _favouriteRecipes;
+                _displayedRecipes = _favouriteRecipes;
                 _numberOfRecipes = 0;
                 UpdateDisplayedRecipes();
             }
@@ -165,14 +170,16 @@ namespace Szef_kuchni.MVVM.ViewModel
         {
             if (string.IsNullOrWhiteSpace(_filterText as string))
             {
-                _filteredRecipes = new ObservableCollection<Recipe>(_filteredRecipes);
+                var limitedRecipes = _favouriteRecipes;
+
+                _filteredRecipes = new ObservableCollection<Recipe>(limitedRecipes);
             }
             else
             {
-                var filtered = _filteredRecipes
+                var limitedRecipes = _favouriteRecipes
                     .Where(recipe => recipe.Title.IndexOf(FilterText as string, StringComparison.OrdinalIgnoreCase) >= 0)
                     .ToList();
-                _filteredRecipes = new ObservableCollection<Recipe>(filtered);
+                _filteredRecipes = new ObservableCollection<Recipe>(limitedRecipes);
             }
             _currentPage = 0;
             _numberOfRecipes = _filteredRecipes.Count();
