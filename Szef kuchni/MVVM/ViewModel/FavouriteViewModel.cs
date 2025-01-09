@@ -166,7 +166,7 @@ namespace Szef_kuchni.MVVM.ViewModel
 
 
 
-        private void ApplyFilter()
+        internal void ApplyFilter()
         {
             if (string.IsNullOrWhiteSpace(_filterText as string))
             {
