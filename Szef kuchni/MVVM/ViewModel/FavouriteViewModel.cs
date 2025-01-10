@@ -21,7 +21,7 @@ namespace Szef_kuchni.MVVM.ViewModel
         private object _filterText;
         private string _dbFilePath;
         private int _currentPage;
-        private const int RecipesPerPage = 15;
+        private const int RecipesPerPage = 20;
 
         private Datahelper _dataHelper;
 
@@ -76,13 +76,13 @@ namespace Szef_kuchni.MVVM.ViewModel
         }
         public void SetColumnCount(double windowWidth)
         {
-            if (windowWidth > 1200)
+            if (windowWidth > 1280)
             {
                 ColumnCount = 5;
             }
             else
             {
-                ColumnCount = 3;
+                ColumnCount = 4;
             }
         }
 
@@ -98,7 +98,7 @@ namespace Szef_kuchni.MVVM.ViewModel
                 _filteredRecipes = _favouriteRecipes;
                 _displayedRecipes = _favouriteRecipes;
                 _numberOfRecipes = _favouriteRecipes.Count;
-                if (_numberOfRecipes % 15 == 0)
+                if (_numberOfRecipes % 20 == 0)
                 {
                     BackOnePage();
                 }
@@ -211,7 +211,7 @@ namespace Szef_kuchni.MVVM.ViewModel
 
         private void UpdatePaginationVisibility()
         {
-            IsPaginationVisible = _numberOfRecipes > 15;
+            IsPaginationVisible = _numberOfRecipes > 20;
         }
 
         public void BackOnePage()

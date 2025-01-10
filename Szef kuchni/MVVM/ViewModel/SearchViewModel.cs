@@ -49,7 +49,7 @@ namespace Szef_kuchni.MVVM.ViewModel
         private int _numberOfRecipes;
         private readonly Datahelper _dataHelper;
         private int _currentPage;
-        private const int RecipesPerPage = 15;
+        private const int RecipesPerPage = 20;
 
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
@@ -110,13 +110,13 @@ namespace Szef_kuchni.MVVM.ViewModel
 
         public void SetColumnCount(double windowWidth)
         {
-            if (windowWidth > 1200)
+            if (windowWidth > 1280)
             {
                 ColumnCount = 5;
             }
             else
             {
-                ColumnCount = 3;
+                ColumnCount = 4;
             }
         }
 

@@ -65,7 +65,7 @@ namespace Szef_kuchni.MVVM.ViewModel
 
             var limitedRecipes = AllRecipes
                 .OrderByDescending(recipe => recipe.RatingCount) 
-                .Take(15); 
+                .Take(20); 
 
 
             TopRatedRecipes = new ObservableCollection<Recipe>(limitedRecipes);
@@ -73,13 +73,13 @@ namespace Szef_kuchni.MVVM.ViewModel
 
         public void SetColumnCount(double windowWidth)
         {
-            if (windowWidth > 1200)
+            if (windowWidth > 1280)
             {
                 ColumnCount = 5;
             }
             else
             {
-                ColumnCount = 3;
+                ColumnCount = 4;
             }
         }
 
@@ -89,7 +89,7 @@ namespace Szef_kuchni.MVVM.ViewModel
             {
                 var limitedRecipes = AllRecipes
                     .OrderByDescending(recipe => recipe.RatingCount)
-                    .Take(15);
+                    .Take(20);
 
                 TopRatedRecipes = new ObservableCollection<Recipe>(limitedRecipes);
             }
@@ -98,7 +98,7 @@ namespace Szef_kuchni.MVVM.ViewModel
                 var filteredRecipes = AllRecipes
                     .Where(recipe => recipe.Title.IndexOf(FilterText as string, StringComparison.OrdinalIgnoreCase) >= 0)
                     .OrderByDescending(recipe => recipe.RatingCount)
-                    .Take(15);
+                    .Take(20);
 
                 TopRatedRecipes = new ObservableCollection<Recipe>(filteredRecipes);
             }
