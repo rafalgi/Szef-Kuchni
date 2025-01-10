@@ -53,6 +53,7 @@ namespace Szef_kuchni.MVVM.ViewModel
                     HomeVM.FilterText = filterText;
                     SearchVM.FilterText = filterText;
                     HistoryViewModel.FilterText = filterText;
+                    FavouriteVM.FilterText = filterText;
                 }
             }
         }
@@ -72,6 +73,7 @@ namespace Szef_kuchni.MVVM.ViewModel
             FavouriteViewCommand = new RelayCommand(o =>
             {
                 FavouriteVM.LoadFavouriteRecipes(); // odśwież ulubione przepisy
+                FavouriteVM.ApplyFilter();
                 CurrentView = FavouriteVM;
             });
             SearchViewCommand = new RelayCommand(o => CurrentView = SearchVM);
@@ -130,6 +132,7 @@ namespace Szef_kuchni.MVVM.ViewModel
             if (_viewHistory.Count > 0)
             {
                 FavouriteVM.LoadFavouriteRecipes();
+                FavouriteVM.ApplyFilter();
 
                 CurrentView = _viewHistory.Pop();
             }
