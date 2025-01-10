@@ -11,14 +11,8 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <Grid>
-        <TextBlock Text="Ulubione przepisy"
-                FontSize="40"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="20,0,0,0"
-                FontFamily="/Fonts/#Cinzel" />
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,70,0,70">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,0,0,40">
             <ItemsControl ItemsSource="{Binding DisplayedRecipes}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -88,13 +82,15 @@
             <Button Content="Poprzednia strona"
                     Command="{Binding PreviousPageCommand}"
                     IsEnabled="{Binding Path=CanGoPreviousPage, Mode=OneWay}"
-                    Margin="5"
-                    Padding="10,5"/>
+                    Margin="5,5,5,0"
+                    Padding="10,2"
+                    Style="{StaticResource NavigationButtonStyle}"/>
             <Button Content="Następna strona"
                     Command="{Binding NextPageCommand}"
                     IsEnabled="{Binding Path=CanGoNextPage, Mode=OneWay}"
-                    Margin="5"
-                    Padding="10,5"/>
+                    Margin="5,5,5,0"
+                    Padding="10,2"
+                    Style="{StaticResource NavigationButtonStyle}"/>
         </StackPanel>
 
     </Grid>

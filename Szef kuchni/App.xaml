@@ -10,6 +10,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Theme/MenuButtonTheme.xaml"/>
                 <ResourceDictionary Source="Theme/TextBoxTheme.xaml"/>
+                <ResourceDictionary Source="Theme/NavigationButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate DataType='{x:Type viewModel:HomeViewModel}'>
                 <view:HomeView/>
@@ -23,6 +24,6 @@
             <DataTemplate DataType='{x:Type viewModel:HistoryViewModel}'>
                 <view:HistoryView/>
             </DataTemplate>
-        </ResourceDictionary> 
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

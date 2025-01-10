@@ -8,14 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
 
-        <TextBlock Text="Popularne"
-                FontSize="40"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="20,0,0,0"
-                FontFamily="/Fonts/#Cinzel" />
-
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,70,0,10">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,0,0,40">
             <ItemsControl ItemsSource="{Binding TopRatedRecipes}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

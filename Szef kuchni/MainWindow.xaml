@@ -10,7 +10,6 @@
         Title="MainWindow" 
         Width="1280"
         Height="720"
-        
         WindowStyle="None"
         ResizeMode="CanResize"
         Background="Transparent"
@@ -21,7 +20,7 @@
         <viewModel:MainViewModel/>
     </Window.DataContext>
 
-    <Border CornerRadius="30" >
+    <Border CornerRadius="30">
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                 <GradientStop Color="#F1E3C6" Offset="0.0" />
@@ -30,101 +29,117 @@
             </LinearGradientBrush>
         </Border.Background>
         <Grid>
+            <!-- Układ wierszy i kolumn -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <!-- Pierwszy rząd -->
+                <RowDefinition Height="*" />
+                <!-- Drugi rząd -->
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="*" />
+                <!-- Kolumna 1 -->
+                <ColumnDefinition Width="*" />
+                <!-- Kolumna 2 -->
+                <ColumnDefinition Width="2*" />
+                <!-- Kolumna 3 -->
             </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
-                <RowDefinition />
-            </Grid.RowDefinitions>
-
+            <!-- Szef kuchni - 1 rząd, 1 kolumna -->
             <TextBlock Text="Szef kuchni" 
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Foreground="Black"
                        FontSize="40"
-                       FontFamily="/Fonts/#Cinzel"/>
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       FontFamily="/Fonts/#Cinzel" 
+                       Margin="0, 30, 0, 0"
+                       />
 
-
-            <StackPanel Grid.Row="1" Grid.RowSpan="2">
-                <RadioButton Content="Strona główna"
-                             Height="100"
-                             Foreground="Black"
-                             FontSize="20"
-                             Style="{StaticResource MenuButtonStyle}"
-                             IsChecked="True"
-                             Command="{Binding HomeViewCommand}"/>
-
-                <RadioButton Content="Ulubione"
-                             Height="100"
-                             Foreground="Black"
-                             FontSize="20"
-                             Style="{StaticResource MenuButtonStyle}"
-                             Command="{Binding FavouriteViewCommand}"/>
-                <RadioButton Content="Przeglądaj przepisy"
-                             Height="100"
-                             Foreground="Black"
-                             FontSize="20"
-                             Style="{StaticResource MenuButtonStyle}"
-                             Command="{Binding SearchViewCommand}"/>
-                <RadioButton Content="Historia przeglądania"
-                             Height="100"
-                             Foreground="Black"
-                             FontSize="20"
-                             Style="{StaticResource MenuButtonStyle}"
-                             Command="{Binding HistoryViewCommand}"/>
-            </StackPanel>
-
-            <ContentControl Grid.Column="1" Grid.Row="1" Margin="10,10,10,10" Grid.RowSpan="2" Content="{Binding CurrentView}" />
-
-            <TextBox Width="600"
+            <!-- Wyszukaj - 1 rząd, 2 kolumna -->
+            <TextBox Width="300"
                      Height="40"
                      VerticalContentAlignment="Center"
                      HorizontalAlignment="Left"
-                     Margin="20"
+                     Grid.Row="0"
                      Grid.Column="1"
+                     Margin="10, 30, 0, 0"
                      Style="{StaticResource TextBoxStyle}"
-                     Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Content="X"
-                    Width="30"
-                    Height="30"
-                    Grid.Column="1"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Margin="0,10,10,0"
-                    Background="#E57373"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    FontSize="16"
-                    Command="{Binding CloseAppCommand}" />
-            <Button Content="━"
-                    Width="30"
-                    Height="30"
-                    Grid.Column="1"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Margin="0,10,90,0"
-                    Background="#93E1D8"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    FontSize="14"
-                    Command="{Binding MinimizeAppCommand}">
-            </Button>
-            <Button Content="[ ]"
-                    Width="30"
-                    Height="30"
-                    Grid.Column="1"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Margin="0,10,50,0"
-                    Background="#FFD54F"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    FontSize="14"
-                    Command="{Binding MaximizeAppCommand}">
-            </Button>
+                     Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
+
+            <!-- Menu - 1 rząd, 3 kolumna -->
+            <StackPanel Grid.Row="0" Grid.Column="2" 
+                        HorizontalAlignment="Left" 
+                        VerticalAlignment="Center" 
+                        Orientation="Horizontal" 
+                        Margin="10,30,0,0">
+                <RadioButton Content="Popularne"
+                             Width="150"
+                             Height="40"
+                             Foreground="Black"
+                             FontSize="30"
+                             Style="{StaticResource MenuButtonStyle}"
+                             IsChecked="True"
+                             Command="{Binding HomeViewCommand}" />
+                <RadioButton Content="Ulubione"
+                             Width="150"
+                             Height="40"
+                             Foreground="Black"
+                             FontSize="30"
+                             Style="{StaticResource MenuButtonStyle}"
+                             Command="{Binding FavouriteViewCommand}" />
+                <RadioButton Content="Wszystkie"
+                             Width="150"
+                             Height="40"
+                             Foreground="Black"
+                             FontSize="30"
+                             Style="{StaticResource MenuButtonStyle}"
+                             Command="{Binding SearchViewCommand}" />
+                <RadioButton Content="Historia"
+                             Width="150"
+                             Height="40"
+                             Foreground="Black"
+                             FontSize="30"
+                             Style="{StaticResource MenuButtonStyle}"
+                             Command="{Binding HistoryViewCommand}" />
+            </StackPanel>
+
+            <!-- Przycisk zamykania aplikacji -->
+            <StackPanel Grid.Row="0" Grid.Column="2" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Top"
+                        Margin="0,10,10,0">
+
+                <Button Content="━"
+                        Width="30"
+                        Height="30"
+                        Background="#93E1D8"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        FontSize="14"
+                        Command="{Binding MinimizeAppCommand}" />
+                <Button Content="[ ]"
+                        Width="30"
+                        Height="30"
+                        Background="#FFD54F"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        FontSize="14"
+                        Command="{Binding MaximizeAppCommand}" />
+                <Button Content="X"
+                        Width="30"
+                        Height="30"
+                        Background="#E57373"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        FontSize="14"
+                        Command="{Binding CloseAppCommand}" />
+            </StackPanel>
+
+            <!-- Zawartość widoku - 2 rząd -->
+            <ContentControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="10,10,10,0" Content="{Binding CurrentView}" />
         </Grid>
     </Border>
 </Window>
