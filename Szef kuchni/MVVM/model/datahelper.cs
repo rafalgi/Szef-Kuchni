@@ -292,7 +292,7 @@ internal class Datahelper
                             Steps = reader.GetInt32(6),
                             Rating = reader.GetFloat(7),
                             RatingCount = reader.GetInt32(8),
-                            SavePath = reader.GetString(9) 
+                            SavePath = reader.GetString(9)
                         };
                     }
                 }
@@ -303,32 +303,35 @@ internal class Datahelper
 
     public void SaveHistory(int recipeId)
     {
-        using (var connection = new SQLiteConnection(_connectionString))
+        if (CheckLastHistoryRecipeId() != recipeId)
         {
-            connection.Open();
-
-            string query = @"
-                INSERT INTO history (recipe_id, view_date)
-                VALUES (@recipe_id, @view_date)";
-
-            using (var command = new SQLiteCommand(query, connection))
+            using (var connection = new SQLiteConnection(_connectionString))
             {
-                // Ustawianie parametrów
-                command.Parameters.AddWithValue("@recipe_id", recipeId);
+                connection.Open();
 
-                // Aktualny czas w formacie Unix
-                int unixTimestamp = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                command.Parameters.AddWithValue("@view_date", unixTimestamp);
+                string query = @"
+                    INSERT INTO history (recipe_id, view_date)
+                    VALUES (@recipe_id, @view_date)";
 
-                // Wykonanie zapytania
-                command.ExecuteNonQuery();
+                using (var command = new SQLiteCommand(query, connection))
+                {
+                    // Ustawianie parametrów
+                    command.Parameters.AddWithValue("@recipe_id", recipeId);
+
+                    // Aktualny czas w formacie Unix
+                    int unixTimestamp = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                    command.Parameters.AddWithValue("@view_date", unixTimestamp);
+
+                    // Wykonanie zapytania
+                    command.ExecuteNonQuery();
+                }
             }
         }
     }
 
     public void EnsureHistoryLimit()
     {
-        int history_limit = 150;
+        int history_limit =100;
         using (var connection = new SQLiteConnection(_connectionString))
         {
             connection.Open();
@@ -363,6 +366,37 @@ internal class Datahelper
         }
     }
 
+    public int? CheckLastHistoryRecipeId()
+    {
+        // Zmieniamy typ zwracany na int? aby obsłużyć przypadek, gdy nie ma rekordów w tabeli history
+        using (var connection = new SQLiteConnection(_connectionString))
+        {
+            try
+            {
+                connection.Open();
+
+                // Zapytanie SQL do pobrania ostatniego recipe_id
+                string checkQuery = "SELECT recipe_id FROM history ORDER BY view_date DESC LIMIT 1";
+
+                using (var checkCommand = new SQLiteCommand(checkQuery, connection))
+                {
+                    using (var reader = checkCommand.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            // Zwracamy wartość lub null, jeśli pole jest puste
+                            return reader.IsDBNull(0) ? (int?)null : reader.GetInt32(0);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Wystąpił błąd podczas sprawdzania ostatniego ID: {ex.Message}");
+            }
+        }
+        return null;
+    }
 }
 
 
