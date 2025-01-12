@@ -14,6 +14,7 @@ namespace Szef_kuchni.MVVM.ViewModel
         public ICommand OpenRecipeCommand { get; }
         public ICommand GoBackCommand { get; }
         public ICommand MaximizeAppCommand { get; }
+        public ICommand StartCookingCommand { get; }
 
         public RelayCommand HomeViewCommand { get; set; }
         public RelayCommand FavouriteViewCommand { get; set; }
@@ -84,6 +85,7 @@ namespace Szef_kuchni.MVVM.ViewModel
             MaximizeAppCommand = new RelayCommand(ExecuteMaximizeApp);
             OpenRecipeCommand = new RelayCommand(OpenRecipe);
             GoBackCommand = new RelayCommand(GoBack);
+            StartCookingCommand = new RelayCommand(StartCooking);
         }
 
         private void ExecuteCloseApp(object obj)
@@ -139,6 +141,19 @@ namespace Szef_kuchni.MVVM.ViewModel
             else
             {
                 MessageBox.Show("Brak poprzednich widoków w historii.");
+            }
+        }
+
+        private void StartCooking(object parameter)
+        {
+            if (parameter is int recipeId)
+            {
+                _viewHistory.Push(CurrentView);
+                CurrentView = new StartCookingWindow(recipeId);
+            }
+            else
+            {
+                MessageBox.Show("Nie udało się rozpoznać ID przepisu.");
             }
         }
     }

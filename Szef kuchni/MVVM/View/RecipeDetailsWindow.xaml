@@ -168,7 +168,11 @@
 
             <!-- Przycisk po prawej stronie -->
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Command="{Binding StartCookingCommand}" Background="Transparent" BorderThickness="0" Margin="10,0">
+                <Button Command="{Binding DataContext.StartCookingCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                        CommandParameter="{Binding RecipeId}"
+                        Background="Transparent" 
+                        BorderThickness="0" 
+                        Margin="10,0">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Gotuj" VerticalAlignment="Center" FontSize="20" FontFamily="/Fonts/#Poppins" />
                         <Image Source="/Images_mainView/cooking_icon.png" Width="32" Height="32" Margin="5"/>
