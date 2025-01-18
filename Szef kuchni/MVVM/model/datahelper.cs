@@ -365,63 +365,7 @@ internal class Datahelper
             }
         }
     }
-    public ObservableCollection<Ingredient> LoadIngredientsForRecipes()
-    {
-        var ingredients = new ObservableCollection<Ingredient>();
 
-        using (var connection = new SQLiteConnection(_connectionString))
-        {
-            connection.Open();
-
-            string query = "SELECT recipe_id, Ingredient FROM ingredients";
-            using (var command = new SQLiteCommand(query, connection))
-            {
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var ingredient = new Ingredient
-                        {
-                            Id = reader.GetInt32(0),
-                            Ingredients = reader.GetString(1),
-                        };
-                        ingredients.Add(ingredient);
-                    }
-                }
-            }
-        }
-
-        return ingredients;
-    }
-
-    public ObservableCollection<Tag> LoadTagsForRecipes()
-    {
-        var tags = new ObservableCollection<Tag>();
-
-        using (var connection = new SQLiteConnection(_connectionString))
-        {
-            connection.Open();
-
-            string query = "SELECT recipe_id, tag FROM tags";
-            using (var command = new SQLiteCommand(query, connection))
-            {
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var tag = new Tag
-                        {
-                            Id = reader.GetInt32(0),
-                            Name = reader.GetString(1)
-                        };
-                        tags.Add(tag);
-                    }
-                }
-            }
-        }
-
-        return tags;
-    }
     public int? CheckLastHistoryRecipeId()
     {
         // Zmieniamy typ zwracany na int? aby obsłużyć przypadek, gdy nie ma rekordów w tabeli history
@@ -452,7 +396,6 @@ internal class Datahelper
             }
         }
         return null;
-
     }
 }
 
