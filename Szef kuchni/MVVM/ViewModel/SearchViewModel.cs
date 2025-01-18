@@ -4,11 +4,15 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Szef_kuchni.Core;
+using Szef_kuchni.MVVM.Model;
 
 namespace Szef_kuchni.MVVM.ViewModel
 {
     internal class SearchViewModel : ObservableObject
+
     {
+        private ObservableCollection<Ingredient> _allIngredients;
+        private ObservableCollection<Tag> _allTags;
         private ObservableCollection<Recipe> _displayedRecipes;
         private ObservableCollection<Recipe> _allRecipes;
         private ObservableCollection<Recipe> _filteredRecipes;
@@ -65,6 +69,8 @@ namespace Szef_kuchni.MVVM.ViewModel
             NextPageCommand = new RelayCommand(NextPage, CanGoNextPage);
             PreviousPageCommand = new RelayCommand(PreviousPage, CanGoPreviousPage);
 
+            LoadAllIngredients();
+            LoadAllTags();
             LoadAllRecipes();
         }
 
@@ -119,22 +125,42 @@ namespace Szef_kuchni.MVVM.ViewModel
                 ColumnCount = 4;
             }
         }
+        private void LoadAllIngredients()
+        {
+            _allIngredients = _dataHelper.LoadIngredientsForRecipes();
+        }
 
+        private void LoadAllTags()
+        {
+            _allTags = _dataHelper.LoadTagsForRecipes();
+        }
         private void ApplyFilter()
         {
             if (string.IsNullOrWhiteSpace(_filterText as string))
             {
-                var limitedRecipes = _allRecipes;
-
-                _filteredRecipes = new ObservableCollection<Recipe>(limitedRecipes);
+                _filteredRecipes = new ObservableCollection<Recipe>(_allRecipes);
             }
             else
             {
-                var limitedRecipes = _allRecipes
-                    .Where(recipe => recipe.Title.IndexOf(FilterText as string, StringComparison.OrdinalIgnoreCase) >= 0);
+                var filterText = _filterText as string;
+                var filteredByTitle = _allRecipes
+                    .Where(recipe => recipe.Title.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0);
 
-                _filteredRecipes = new ObservableCollection<Recipe>(limitedRecipes);
+                var filteredByIngredients = _allRecipes
+                    .Where(recipe => _allIngredients
+                        .Any(ingredient => ingredient.Id == recipe.Id && ingredient.Ingredients.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0));
+
+                var filteredByTags = _allRecipes
+                    .Where(recipe => _allTags
+                        .Any(tag => tag.Id == recipe.Id && tag.Name.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0));
+
+                var combinedFilteredRecipes = filteredByTitle
+                    .Union(filteredByIngredients)
+                    .Union(filteredByTags);
+
+                _filteredRecipes = new ObservableCollection<Recipe>(combinedFilteredRecipes);
             }
+
             _currentPage = 0;
             _numberOfRecipes = _filteredRecipes.Count();
             UpdateDisplayedRecipes();
