@@ -14,15 +14,23 @@ using System.Windows.Shapes;
 
 namespace Szef_kuchni.MVVM.View
 {
-    /// <summary>
-    /// Interaction logic for StartCookingWindow.xaml
-    /// </summary>
     public partial class StartCookingWindow : UserControl
     {
         public StartCookingWindow(int recipeId)
         {
             InitializeComponent();
             this.DataContext = new StartCookingWindowViewModel(recipeId);
+        }
+
+        // Obsługa zdarzenia Unloaded
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            // Wywołanie komendy w ViewModelu
+            var viewModel = (StartCookingWindowViewModel)this.DataContext;
+            if (viewModel.StopReadingCommand.CanExecute(null))
+            {
+                viewModel.StopReadingCommand.Execute(null);
+            }
         }
     }
 }

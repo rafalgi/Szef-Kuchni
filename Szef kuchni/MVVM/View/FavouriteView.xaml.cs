@@ -11,8 +11,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows;
-using System.Windows.Controls;
 using Szef_kuchni.MVVM.ViewModel;
 
 namespace Szef_kuchni.MVVM.View
