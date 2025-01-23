@@ -78,7 +78,12 @@ namespace Szef_kuchni.MVVM.ViewModel
                 CurrentView = FavouriteVM;
             });
             SearchViewCommand = new RelayCommand(o => CurrentView = SearchVM);
-            HistoryViewCommand = new RelayCommand(o => CurrentView = HistoryViewModel);
+            HistoryViewCommand = new RelayCommand(o =>
+            {
+                HistoryViewModel.LoadAllRecipes(); // odśwież ulubione przepisy
+                HistoryViewModel.ApplyFilter();
+                CurrentView = HistoryViewModel;
+            });
 
             CloseAppCommand = new RelayCommand(ExecuteCloseApp);
             MinimizeAppCommand = new RelayCommand(ExecuteMinimizeApp);
@@ -113,12 +118,8 @@ namespace Szef_kuchni.MVVM.ViewModel
         {
             if (parameter is int recipeId)
             {
-                if (CurrentView != HistoryViewModel)
-                {
-                    _dataHelper.SaveHistory(recipeId);
-                    _dataHelper.EnsureHistoryLimit();
-                    HistoryViewModel = new HistoryViewModel();
-                }
+                _dataHelper.SaveHistory(recipeId);
+                _dataHelper.EnsureHistoryLimit();
                 _viewHistory.Push(CurrentView); 
                 CurrentView = new RecipeDetailsWindow(recipeId);
             }
@@ -133,6 +134,9 @@ namespace Szef_kuchni.MVVM.ViewModel
 
             if (_viewHistory.Count > 0)
             {
+                HistoryViewModel.LoadAllRecipes();
+                HistoryViewModel.ApplyFilter();
+
                 FavouriteVM.LoadFavouriteRecipes();
                 FavouriteVM.ApplyFilter();
 

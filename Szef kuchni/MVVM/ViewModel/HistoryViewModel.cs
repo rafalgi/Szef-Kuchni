@@ -62,7 +62,6 @@ namespace Szef_kuchni.MVVM.ViewModel
             DisplayedRecipes = new ObservableCollection<Recipe>();
             string dbPath = @"../../recipes.db";
             _dataHelper = new Datahelper(dbPath);
-
             _currentPage = 0;
 
             NextPageCommand = new RelayCommand(NextPage, CanGoNextPage);
@@ -71,7 +70,7 @@ namespace Szef_kuchni.MVVM.ViewModel
             LoadAllRecipes();
         }
 
-        private void LoadAllRecipes()
+        internal void LoadAllRecipes()
         {
             _historyRecipes = _dataHelper.LoadHistoryRecipes();
             _displayedRecipes = _historyRecipes;
@@ -80,7 +79,7 @@ namespace Szef_kuchni.MVVM.ViewModel
             UpdateDisplayedRecipes();
         }
 
-        private void UpdateDisplayedRecipes()
+        internal void UpdateDisplayedRecipes()
         {
             var skip = _currentPage * RecipesPerPage;
             var recipesToShow = _filteredRecipes.Skip(skip).Take(RecipesPerPage);
@@ -123,7 +122,7 @@ namespace Szef_kuchni.MVVM.ViewModel
             }
         }
 
-        private void ApplyFilter()
+        internal void ApplyFilter()
         {
             if (string.IsNullOrWhiteSpace(_filterText as string))
             {

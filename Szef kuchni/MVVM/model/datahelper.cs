@@ -303,28 +303,38 @@ internal class Datahelper
 
     public void SaveHistory(int recipeId)
     {
-        if (CheckLastHistoryRecipeId() != recipeId)
+        if (CheckLastHistoryRecipeId() == recipeId)
         {
-            using (var connection = new SQLiteConnection(_connectionString))
+            return;
+        }
+        using (var connection = new SQLiteConnection(_connectionString))
+        {
+            connection.Open();
+
+            // Usuwanie wcześniejszych wpisów z tym samym recipeId
+            string deleteQuery = "DELETE FROM history WHERE recipe_id = @recipe_id";
+            using (var deleteCommand = new SQLiteCommand(deleteQuery, connection))
             {
-                connection.Open();
+                deleteCommand.Parameters.AddWithValue("@recipe_id", recipeId);
+                deleteCommand.ExecuteNonQuery();
+            }
 
-                string query = @"
-                    INSERT INTO history (recipe_id, view_date)
-                    VALUES (@recipe_id, @view_date)";
+            // Wstawianie nowego wpisu
+            string query = @"
+                INSERT INTO history (recipe_id, view_date)
+                VALUES (@recipe_id, @view_date)";
 
-                using (var command = new SQLiteCommand(query, connection))
-                {
-                    // Ustawianie parametrów
-                    command.Parameters.AddWithValue("@recipe_id", recipeId);
+            using (var command = new SQLiteCommand(query, connection))
+            {
+                // Ustawianie parametrów
+                command.Parameters.AddWithValue("@recipe_id", recipeId);
 
-                    // Aktualny czas w formacie Unix
-                    int unixTimestamp = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                    command.Parameters.AddWithValue("@view_date", unixTimestamp);
+                // Aktualny czas w formacie Unix
+                int unixTimestamp = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                command.Parameters.AddWithValue("@view_date", unixTimestamp);
 
-                    // Wykonanie zapytania
-                    command.ExecuteNonQuery();
-                }
+                // Wykonanie zapytania
+                command.ExecuteNonQuery();
             }
         }
     }
