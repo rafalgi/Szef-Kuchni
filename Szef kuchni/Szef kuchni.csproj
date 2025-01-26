@@ -196,6 +196,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\FilterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\HistoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -241,6 +245,7 @@
     <Compile Include="MVVM\Model\Step.cs" />
     <Compile Include="MVVM\Model\Tag.cs" />
     <Compile Include="MVVM\ViewModel\FavouriteViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\FilterViewModel.cs" />
     <Compile Include="MVVM\ViewModel\HistoryViewModel.cs" />
     <Compile Include="MVVM\ViewModel\HomeViewModel.cs" />
     <Compile Include="MVVM\ViewModel\IngredientsWindowViewModel.cs" />
@@ -250,6 +255,9 @@
     <Compile Include="MVVM\ViewModel\StartCookingWindowViewModel.cs" />
     <Compile Include="MVVM\View\FavouriteView.xaml.cs">
       <DependentUpon>FavouriteView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\FilterView.xaml.cs">
+      <DependentUpon>FilterView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\HistoryView.xaml.cs">
       <DependentUpon>HistoryView.xaml</DependentUpon>

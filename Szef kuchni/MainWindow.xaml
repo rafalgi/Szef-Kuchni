@@ -37,9 +37,9 @@
                 <!-- Drugi rząd -->
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="0.8*" />
                 <!-- Kolumna 1 -->
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="0.6*" />
                 <!-- Kolumna 2 -->
                 <ColumnDefinition Width="2*" />
                 <!-- Kolumna 3 -->
@@ -58,13 +58,13 @@
                        />
 
             <!-- Wyszukaj - 1 rząd, 2 kolumna -->
-            <TextBox Width="300"
+            <TextBox Width="200"
                      Height="40"
                      VerticalContentAlignment="Center"
                      HorizontalAlignment="Left"
                      Grid.Row="0"
                      Grid.Column="1"
-                     Margin="10, 30, 0, 0"
+                     Margin="10,45,0,15"
                      Style="{StaticResource TextBoxStyle}"
                      Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -83,7 +83,7 @@
                              IsChecked="True"
                              Command="{Binding HomeViewCommand}" />
                 <RadioButton Content="Ulubione"
-                             Width="150"
+                             Width="160"
                              Height="40"
                              Foreground="Black"
                              FontSize="30"
@@ -97,12 +97,19 @@
                              Style="{StaticResource MenuButtonStyle}"
                              Command="{Binding SearchViewCommand}" />
                 <RadioButton Content="Historia"
-                             Width="150"
+                             Width="130"
                              Height="40"
                              Foreground="Black"
                              FontSize="30"
                              Style="{StaticResource MenuButtonStyle}"
                              Command="{Binding HistoryViewCommand}" />
+                <RadioButton Content="Szukaj"
+                             Width="105"
+                             Height="40"
+                             Foreground="Black"
+                             FontSize="30"
+                             Style="{StaticResource MenuButtonStyle}"
+                             Command="{Binding FilterViewCommand}" />
             </StackPanel>
 
             <!-- Przycisk zamykania aplikacji -->

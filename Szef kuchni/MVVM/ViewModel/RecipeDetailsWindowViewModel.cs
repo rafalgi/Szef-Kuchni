@@ -93,6 +93,50 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
             OnPropertyChanged();
         }
     }
+
+    private float _rating;
+    public float Rating
+    {
+        get => _rating;
+        set
+        {
+            _rating = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private int _rating_count;
+    public int Rating_count
+    {
+        get => _rating_count;
+        set
+        {
+            _rating_count = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _rating_with_count;
+    public string Rating_with_count
+    {
+        get => _rating_with_count;
+        set
+        {
+            _rating_with_count = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _servings;
+    public string Servings
+    {
+        get => _servings;
+        set
+        {
+            _servings = value;
+            OnPropertyChanged();
+        }
+    }
     //KONSTRUKTOR
     public RecipeDetailsWindowViewModel(int recipeId)
     {
@@ -143,6 +187,10 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
             Title = recipe.Title;
             PrepTime = recipe.PrepTime;
             Difficulty = recipe.Difficulty;
+            Servings = recipe.Servings;
+            Rating = recipe.Rating;
+            Rating_count = recipe.RatingCount;
+            Rating_with_count = $"{Rating:F1} ({Rating_count} ocen)";
             RecipeId = recipeId;
         }
         else

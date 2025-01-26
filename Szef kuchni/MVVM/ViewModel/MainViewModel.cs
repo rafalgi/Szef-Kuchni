@@ -20,10 +20,12 @@ namespace Szef_kuchni.MVVM.ViewModel
         public RelayCommand FavouriteViewCommand { get; set; }
         public RelayCommand SearchViewCommand { get; set; }
         public RelayCommand HistoryViewCommand { get; set; }
+        public RelayCommand FilterViewCommand { get; set; }
 
         public HomeViewModel HomeVM { get; set; }
         public FavouriteViewModel FavouriteVM { get; set; }
         public SearchViewModel SearchVM { get; set; }
+        public FilterViewModel FilterVM { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
 
         private object _filterText;
@@ -64,6 +66,7 @@ namespace Szef_kuchni.MVVM.ViewModel
             HomeVM = new HomeViewModel();
             FavouriteVM = new FavouriteViewModel();
             SearchVM = new SearchViewModel();
+            FilterVM = new FilterViewModel();
             HistoryViewModel = new HistoryViewModel();
             CurrentView = HomeVM;
 
@@ -78,6 +81,7 @@ namespace Szef_kuchni.MVVM.ViewModel
                 CurrentView = FavouriteVM;
             });
             SearchViewCommand = new RelayCommand(o => CurrentView = SearchVM);
+            FilterViewCommand = new RelayCommand(o => CurrentView = FilterVM);
             HistoryViewCommand = new RelayCommand(o =>
             {
                 HistoryViewModel.LoadAllRecipes(); // odśwież ulubione przepisy

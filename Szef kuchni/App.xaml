@@ -24,6 +24,9 @@
             <DataTemplate DataType='{x:Type viewModel:HistoryViewModel}'>
                 <view:HistoryView/>
             </DataTemplate>
+            <DataTemplate DataType='{x:Type viewModel:FilterViewModel}'>
+                <view:FilterView/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
