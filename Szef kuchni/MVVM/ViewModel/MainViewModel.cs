@@ -187,9 +187,7 @@ namespace Szef_kuchni.MVVM.ViewModel
         {
             if (e.PropertyName == nameof(FilterViewModel.FilteredSortedRecipes))
             {
-                HistoryViewModel.FilteredSortedRecipes = FilterVM.FilteredSortedRecipes;
                 SearchVM.FilteredSortedRecipes = FilterVM.FilteredSortedRecipes;
-                FavouriteVM.FilteredSortedRecipes = FilterVM.FilteredSortedRecipes;
             }
         }
     }

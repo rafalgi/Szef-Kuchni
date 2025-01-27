@@ -47,7 +47,6 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
                 <RowDefinition Height="0.3*" />
             </Grid.RowDefinitions>
             <TextBlock  Text="Poziom trudności" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
@@ -56,8 +55,6 @@
             <TextBlock  Text="Liczba porcji" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
             <TextBlock  Text="Liczba kroków" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
             <TextBlock  Text="Liczba ocen" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
-            <TextBlock  Text="Składniki" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
-            <TextBlock  Text="Kategorie" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
 
             <TextBlock  Text="od" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
             <TextBlock  Text="do" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
@@ -90,19 +87,27 @@
             <TextBox Height="30" Grid.Row="1" Grid.Column="2" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding TimeLower, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBox Height="30" Grid.Row="1" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding TimeUpper, UpdateSourceTrigger=PropertyChanged}"/>
 
+            <TextBox Height="30" Grid.Row="2" Grid.Column="2" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding RatingLowerString, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Height="30" Grid.Row="2" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding RatingUpperString, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBox Height="30" Grid.Row="3" Grid.Column="2" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding ServingsLower, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Height="30" Grid.Row="3" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding ServingsUpper, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBox Height="30" Grid.Row="4" Grid.Column="2" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding StepsCountLower, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Height="30" Grid.Row="4" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding StepsCountUpper, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBox Height="30" Grid.Row="5" Grid.Column="2" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding RatingCountLower, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Height="30" Grid.Row="5" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding RatingCountUpper, UpdateSourceTrigger=PropertyChanged}"/>
 
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
@@ -118,11 +123,52 @@
             <TextBlock  Text="Liczba porcji" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
             <TextBlock  Text="Liczba kroków" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
             <TextBlock  Text="Liczba ocen" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
-            
-            <Button Content="Resetuj" Grid.Row="7" Grid.ColumnSpan="5" Width="150" Height="40" Command="{Binding ResetAllCommand}"/>
 
+            <ComboBox Height="30" Width="100" Grid.Row="0" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Text="{Binding DifficultySort, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox.Items>
+                    <ComboBoxItem Content="Malejąco" />
+                    <ComboBoxItem Content="Rosnąco" />
+                </ComboBox.Items>
+            </ComboBox>
 
+            <ComboBox Height="30" Width="100" Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Text="{Binding TimeSort, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox.Items>
+                    <ComboBoxItem Content="Malejąco" />
+                    <ComboBoxItem Content="Rosnąco" />
+                </ComboBox.Items>
+            </ComboBox>
+
+            <ComboBox Height="30" Width="100" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Text="{Binding RatingSort, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox.Items>
+                    <ComboBoxItem Content="Malejąco" />
+                    <ComboBoxItem Content="Rosnąco" />
+                </ComboBox.Items>
+            </ComboBox>
+
+            <ComboBox Height="30" Width="100" Grid.Row="3" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Text="{Binding ServingsSort, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox.Items>
+                    <ComboBoxItem Content="Malejąco" />
+                    <ComboBoxItem Content="Rosnąco" />
+                </ComboBox.Items>
+            </ComboBox>
+
+            <ComboBox Height="30" Width="100" Grid.Row="4" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Text="{Binding StepsCountSort, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox.Items>
+                    <ComboBoxItem Content="Malejąco" />
+                    <ComboBoxItem Content="Rosnąco" />
+                </ComboBox.Items>
+            </ComboBox>
+
+            <ComboBox Height="30" Width="100" Grid.Row="5" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Text="{Binding RatingCountSort, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox.Items>
+                    <ComboBoxItem Content="Malejąco" />
+                    <ComboBoxItem Content="Rosnąco" />
+                </ComboBox.Items>
+            </ComboBox>
 
         </Grid>
+
+        <Button Content="Resetuj" Grid.Row="1" Grid.ColumnSpan="2" Width="150" Height="40" VerticalAlignment="Bottom" Command="{Binding ResetAllCommand}" Margin="325,0,325,20"/>
+
     </Grid>
 </UserControl>

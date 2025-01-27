@@ -142,7 +142,7 @@ namespace Szef_kuchni.MVVM.ViewModel
                 var limitedRecipes = _allRecipes;
 
                 // Element filtrujący przepisy według zakładki "Szukaj"
-                if (_filteredSortedRecipes != null && _filteredSortedRecipes.Count != 1307)
+                if (_filteredSortedRecipes != null)
                 {
                     _filteredRecipes = new ObservableCollection<Recipe>(_filteredSortedRecipes.Where(recipe => limitedRecipes.Any(limited => limited.Id == recipe.Id)).OrderBy(item => _filteredSortedRecipes.IndexOf(item)));
                 }
@@ -158,7 +158,7 @@ namespace Szef_kuchni.MVVM.ViewModel
                     .Where(recipe => recipe.Title.IndexOf(FilterText as string, StringComparison.OrdinalIgnoreCase) >= 0);
 
                 // Element filtrujący przepisy według zakładki "Szukaj"
-                if (_filteredSortedRecipes != null && _filteredSortedRecipes.Count != 1307)
+                if (_filteredSortedRecipes != null)
                 {
                     _filteredRecipes = new ObservableCollection<Recipe>(_filteredSortedRecipes.Where(recipe => limitedRecipes.Any(limited => limited.Id == recipe.Id)).OrderBy(item => _filteredSortedRecipes.IndexOf(item)));
                 }
