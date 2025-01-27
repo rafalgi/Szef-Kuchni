@@ -87,6 +87,9 @@
                 </ComboBox.Items>
             </ComboBox>
 
+            <TextBox Height="30" Grid.Row="1" Grid.Column="2" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding TimeLower, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Height="30" Grid.Row="1" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding TimeUpper, UpdateSourceTrigger=PropertyChanged}"/>
+
 
         </Grid>
 
