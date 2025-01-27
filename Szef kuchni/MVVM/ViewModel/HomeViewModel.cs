@@ -95,6 +95,7 @@ namespace Szef_kuchni.MVVM.ViewModel
             }
             else
             {
+                // Element filtrujący przepisy według textboxa
                 var filteredRecipes = AllRecipes
                     .Where(recipe => recipe.Title.IndexOf(FilterText as string, StringComparison.OrdinalIgnoreCase) >= 0)
                     .OrderByDescending(recipe => recipe.RatingCount)

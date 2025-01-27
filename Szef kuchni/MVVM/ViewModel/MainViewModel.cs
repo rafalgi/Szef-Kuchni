@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using Szef_kuchni.Core;
@@ -31,6 +33,7 @@ namespace Szef_kuchni.MVVM.ViewModel
         private object _filterText;
         private object _currentView;
         private readonly Stack<object> _viewHistory = new Stack<object>();
+        private ObservableCollection<Recipe> _filteredSortedRecipes;
         private Datahelper _dataHelper;
 
         public object CurrentView
@@ -57,6 +60,19 @@ namespace Szef_kuchni.MVVM.ViewModel
                     SearchVM.FilterText = filterText;
                     HistoryViewModel.FilterText = filterText;
                     FavouriteVM.FilterText = filterText;
+                }
+            }
+        }
+
+        public ObservableCollection<Recipe> FilteredSortedRecipes
+        {
+            get => _filteredSortedRecipes;
+            set
+            {
+                if (_filteredSortedRecipes != value)
+                {
+                    _filteredSortedRecipes = value;
+                    OnPropertyChanged(nameof(FilteredSortedRecipes));
                 }
             }
         }
@@ -95,6 +111,8 @@ namespace Szef_kuchni.MVVM.ViewModel
             OpenRecipeCommand = new RelayCommand(OpenRecipe);
             GoBackCommand = new RelayCommand(GoBack);
             StartCookingCommand = new RelayCommand(StartCooking);
+
+            FilterVM.PropertyChanged += FilterVM_PropertyChanged;
         }
 
         private void ExecuteCloseApp(object obj)
@@ -162,6 +180,16 @@ namespace Szef_kuchni.MVVM.ViewModel
             else
             {
                 MessageBox.Show("Nie udało się rozpoznać ID przepisu.");
+            }
+        }
+
+        private void FilterVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(FilterViewModel.FilteredSortedRecipes))
+            {
+                HistoryViewModel.FilteredSortedRecipes = FilterVM.FilteredSortedRecipes;
+                SearchVM.FilteredSortedRecipes = FilterVM.FilteredSortedRecipes;
+                FavouriteVM.FilteredSortedRecipes = FilterVM.FilteredSortedRecipes;
             }
         }
     }

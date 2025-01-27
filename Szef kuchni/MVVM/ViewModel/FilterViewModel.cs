@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 using Szef_kuchni.Core;
 
 namespace Szef_kuchni.MVVM.ViewModel
@@ -12,6 +14,10 @@ namespace Szef_kuchni.MVVM.ViewModel
     {
         private readonly Datahelper _dataHelper;
         private ObservableCollection<Recipe> _filteredSortedRecipes;
+        private ObservableCollection<Recipe> _allRecipes;
+        public ICommand ResetAllCommand { get; }
+        private string _difficultyLower;
+        private string _difficultyUpper;
 
         public ObservableCollection<Recipe> FilteredSortedRecipes
         {
@@ -23,11 +29,67 @@ namespace Szef_kuchni.MVVM.ViewModel
             }
         }
 
+        public string DifficultyLower
+        {
+            get => _difficultyLower;
+            set
+            {
+                _difficultyLower = value;
+                OnPropertyChanged();
+
+                DifficultyUpper = DifficultyLower;
+            }
+        }
+
+        public string DifficultyUpper
+        {
+            get => _difficultyUpper;
+            set
+            {
+                _difficultyUpper = value;
+                OnPropertyChanged();
+
+
+                if (DifficultyLower == "Łatwy" && DifficultyUpper == "Łatwy")
+                {
+                    FilteredSortedRecipes = new ObservableCollection<Recipe>(_allRecipes.Where(recipe => recipe.Difficulty == "Łatwy"));
+                }
+                if (DifficultyLower == "Średni" && DifficultyUpper == "Średni")
+                {
+                    FilteredSortedRecipes = new ObservableCollection<Recipe>(_allRecipes.Where(recipe => recipe.Difficulty == "Średni"));
+                }
+                if (DifficultyLower == "Trudny" && DifficultyUpper == "Trudny")
+                {
+                    FilteredSortedRecipes = new ObservableCollection<Recipe>(_allRecipes.Where(recipe => recipe.Difficulty == "Trudny"));
+                }
+                if (DifficultyLower == "Łatwy" && DifficultyUpper == "Średni")
+                {
+                    FilteredSortedRecipes = new ObservableCollection<Recipe>(_allRecipes.Where(recipe => recipe.Difficulty == "Łatwy" || recipe.Difficulty == "Średni"));
+                }
+                if (DifficultyLower == "Łatwy" && DifficultyUpper == "Trudny")
+                {
+                    FilteredSortedRecipes = new ObservableCollection<Recipe>(_allRecipes.Where(recipe => recipe.Difficulty == "Łatwy" || recipe.Difficulty == "Średni" || recipe.Difficulty == "Trudny"));
+                }
+                if (DifficultyLower == "Średni" && DifficultyUpper == "Trudny")
+                {
+                    FilteredSortedRecipes = new ObservableCollection<Recipe>(_allRecipes.Where(recipe => recipe.Difficulty == "Średni" || recipe.Difficulty == "Trudny"));
+                }
+            }
+        }
+
         public FilterViewModel()
         {
             string dbPath = @"../../recipes.db"; // ścieżka do bazy danych
             _dataHelper = new Datahelper(dbPath);
-            FilteredSortedRecipes= new ObservableCollection<Recipe>(_dataHelper.LoadRecipes());
+            _allRecipes = new ObservableCollection<Recipe>(_dataHelper.LoadRecipes());
+            ResetAllCommand = new RelayCommand(ResetAll);
+        }
+
+        private void ResetAll(object parameter)
+        {
+            DifficultyLower = null;
+            DifficultyUpper = null;
+            FilteredSortedRecipes = _allRecipes;
         }
     }
 }

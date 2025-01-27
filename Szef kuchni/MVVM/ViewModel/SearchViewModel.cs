@@ -12,6 +12,7 @@ namespace Szef_kuchni.MVVM.ViewModel
         private ObservableCollection<Recipe> _displayedRecipes;
         private ObservableCollection<Recipe> _allRecipes;
         private ObservableCollection<Recipe> _filteredRecipes;
+        private ObservableCollection<Recipe> _filteredSortedRecipes;
         private int _columnCount;
         private object _filterText;
 
@@ -43,6 +44,20 @@ namespace Szef_kuchni.MVVM.ViewModel
             {
                 _columnCount = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<Recipe> FilteredSortedRecipes
+        {
+            get => _filteredSortedRecipes;
+            set
+            {
+                if (_filteredSortedRecipes != value)
+                {
+                    _filteredSortedRecipes = value;
+                    OnPropertyChanged(nameof(FilteredSortedRecipes));
+                    ApplyFilter();
+                }
             }
         }
 
@@ -126,14 +141,31 @@ namespace Szef_kuchni.MVVM.ViewModel
             {
                 var limitedRecipes = _allRecipes;
 
-                _filteredRecipes = new ObservableCollection<Recipe>(limitedRecipes);
+                // Element filtrujący przepisy według zakładki "Szukaj"
+                if (_filteredSortedRecipes != null && _filteredSortedRecipes.Count != 1307)
+                {
+                    _filteredRecipes = new ObservableCollection<Recipe>(_filteredSortedRecipes.Where(recipe => limitedRecipes.Any(limited => limited.Id == recipe.Id)).OrderBy(item => _filteredSortedRecipes.IndexOf(item)));
+                }
+                else
+                {
+                    _filteredRecipes = new ObservableCollection<Recipe>(limitedRecipes);
+                }
             }
             else
             {
+                // Element filtrujący przepisy według textboxa
                 var limitedRecipes = _allRecipes
                     .Where(recipe => recipe.Title.IndexOf(FilterText as string, StringComparison.OrdinalIgnoreCase) >= 0);
 
-                _filteredRecipes = new ObservableCollection<Recipe>(limitedRecipes);
+                // Element filtrujący przepisy według zakładki "Szukaj"
+                if (_filteredSortedRecipes != null && _filteredSortedRecipes.Count != 1307)
+                {
+                    _filteredRecipes = new ObservableCollection<Recipe>(_filteredSortedRecipes.Where(recipe => limitedRecipes.Any(limited => limited.Id == recipe.Id)).OrderBy(item => _filteredSortedRecipes.IndexOf(item)));
+                }
+                else
+                {
+                    _filteredRecipes = new ObservableCollection<Recipe>(limitedRecipes);
+                }
             }
             _currentPage = 0;
             _numberOfRecipes = _filteredRecipes.Count();

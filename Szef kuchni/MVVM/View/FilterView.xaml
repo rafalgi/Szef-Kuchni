@@ -72,7 +72,14 @@
             <TextBlock  Text="od" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
             <TextBlock  Text="do" Grid.Row="5" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
 
-            <ComboBox Height="30" Grid.Row="0" Grid.Column="2" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Difficulty, UpdateSourceTrigger=PropertyChanged}">
+            <ComboBox Height="30" Grid.Row="0" Grid.Column="2" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding DifficultyLower, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox.Items>
+                    <ComboBoxItem Content="Łatwy" />
+                    <ComboBoxItem Content="Średni" />
+                    <ComboBoxItem Content="Trudny" />
+                </ComboBox.Items>
+            </ComboBox>
+            <ComboBox Height="30" Grid.Row="0" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding DifficultyUpper, UpdateSourceTrigger=PropertyChanged}">
                 <ComboBox.Items>
                     <ComboBoxItem Content="Łatwy" />
                     <ComboBoxItem Content="Średni" />
@@ -109,7 +116,9 @@
             <TextBlock  Text="Liczba kroków" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
             <TextBlock  Text="Liczba ocen" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" TextAlignment="Center" Foreground="#4B3621"/>
             
-            
+            <Button Content="Resetuj" Grid.Row="7" Grid.ColumnSpan="5" Width="150" Height="40" Command="{Binding ResetAllCommand}"/>
+
+
 
         </Grid>
     </Grid>
