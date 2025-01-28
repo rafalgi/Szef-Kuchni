@@ -64,6 +64,21 @@ namespace Szef_kuchni.MVVM.ViewModel
             }
         }
 
+        private bool _isTextBoxEnabled = true;
+
+        public bool IsTextBoxEnabled
+        {
+            get => _isTextBoxEnabled;
+            set
+            {
+                if (_isTextBoxEnabled != value)
+                {
+                    _isTextBoxEnabled = value;
+                    OnPropertyChanged();  // Wywołanie PropertyChanged w celu powiadomienia UI.
+                }
+            }
+        }
+
         public ObservableCollection<Recipe> FilteredSortedRecipes
         {
             get => _filteredSortedRecipes;
@@ -89,17 +104,32 @@ namespace Szef_kuchni.MVVM.ViewModel
             string dbPath = @"../../recipes.db"; // ścieżka do bazy danych
             _dataHelper = new Datahelper(dbPath);
 
-            HomeViewCommand = new RelayCommand(o => CurrentView = HomeVM);
+            HomeViewCommand = new RelayCommand(o =>
+            {
+                CurrentView = HomeVM;
+                IsTextBoxEnabled = true;
+            });
             FavouriteViewCommand = new RelayCommand(o =>
             {
+                IsTextBoxEnabled = true;
                 FavouriteVM.LoadFavouriteRecipes(); // odśwież ulubione przepisy
                 FavouriteVM.ApplyFilter();
                 CurrentView = FavouriteVM;
             });
-            SearchViewCommand = new RelayCommand(o => CurrentView = SearchVM);
-            FilterViewCommand = new RelayCommand(o => CurrentView = FilterVM);
+            SearchViewCommand = new RelayCommand(o =>
+            {
+                IsTextBoxEnabled = true;
+                CurrentView = SearchVM;
+            });
+            FilterViewCommand = new RelayCommand(o =>
+            {
+                FilterText = string.Empty;
+                IsTextBoxEnabled = false;
+                CurrentView = FilterVM;
+            });
             HistoryViewCommand = new RelayCommand(o =>
             {
+                IsTextBoxEnabled = true;
                 HistoryViewModel.LoadAllRecipes(); // odśwież ulubione przepisy
                 HistoryViewModel.ApplyFilter();
                 CurrentView = HistoryViewModel;
@@ -144,6 +174,7 @@ namespace Szef_kuchni.MVVM.ViewModel
                 _dataHelper.EnsureHistoryLimit();
                 _viewHistory.Push(CurrentView); 
                 CurrentView = new RecipeDetailsWindow(recipeId);
+                IsTextBoxEnabled = false;
             }
             else
             {
@@ -156,9 +187,17 @@ namespace Szef_kuchni.MVVM.ViewModel
 
             if (_viewHistory.Count > 0)
             {
+                if (CurrentView is StartCookingWindow)
+                {
+                    IsTextBoxEnabled = false;
+                }
+                else
+                {
+                    IsTextBoxEnabled = true;
+                }
+
                 HistoryViewModel.LoadAllRecipes();
                 HistoryViewModel.ApplyFilter();
-
                 FavouriteVM.LoadFavouriteRecipes();
                 FavouriteVM.ApplyFilter();
 
@@ -174,6 +213,7 @@ namespace Szef_kuchni.MVVM.ViewModel
         {
             if (parameter is int recipeId)
             {
+                FilterText = string.Empty;
                 _viewHistory.Push(CurrentView);
                 CurrentView = new StartCookingWindow(recipeId);
             }
