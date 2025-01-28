@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Szef_kuchni.Core;
 using Szef_kuchni.MVVM.View;
@@ -147,17 +148,17 @@ namespace Szef_kuchni.MVVM.ViewModel
 
         private void ExecuteCloseApp(object obj)
         {
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
 
         private void ExecuteMinimizeApp(object obj)
         {
-            Application.Current.MainWindow.WindowState = WindowState.Minimized;
+            System.Windows.Application.Current.MainWindow.WindowState = WindowState.Minimized;
         }
 
         private void ExecuteMaximizeApp(object obj)
         {
-            var mainWindow = Application.Current.MainWindow;
+            var mainWindow = System.Windows.Application.Current.MainWindow;
             if (mainWindow != null)
             {
                 mainWindow.WindowState = mainWindow.WindowState == WindowState.Maximized
@@ -178,7 +179,7 @@ namespace Szef_kuchni.MVVM.ViewModel
             }
             else
             {
-                MessageBox.Show("Nie udało się rozpoznać ID przepisu.");
+                System.Windows.MessageBox.Show("Nie udało się rozpoznać ID przepisu.");
             }
         }
 
@@ -205,7 +206,7 @@ namespace Szef_kuchni.MVVM.ViewModel
             }
             else
             {
-                MessageBox.Show("Brak poprzednich widoków w historii.");
+                System.Windows.MessageBox.Show("Brak poprzednich widoków w historii.");
             }
         }
 
@@ -213,13 +214,15 @@ namespace Szef_kuchni.MVVM.ViewModel
         {
             if (parameter is int recipeId)
             {
+                DialogResult result = System.Windows.Forms.MessageBox.Show("W kolejnym oknie będziesz miał możliwość sterowania głosem. Komendy, które są obsługiwane:                                                                                                    next (/nekst/) - następny krok                                                                             previous (/ˈpriːviəs/) - poprzedni krok                                                   ingredients (/ɪnˈɡriːdiənts/) - otwórz listę składników                                            close ingredients (/kloʊz ɪnˈɡriːdiənts/) - zamknij listę składników                       Jest także możliwość, aby kroki były czytane. Czy chcesz skorzystać z tej opcji?", "Informacja", MessageBoxButtons.YesNo);
+                bool isReadingEnabled = (result == DialogResult.Yes);
                 FilterText = string.Empty;
                 _viewHistory.Push(CurrentView);
-                CurrentView = new StartCookingWindow(recipeId);
+                CurrentView = new StartCookingWindow(recipeId, isReadingEnabled);
             }
             else
             {
-                MessageBox.Show("Nie udało się rozpoznać ID przepisu.");
+                System.Windows.MessageBox.Show("Nie udało się rozpoznać ID przepisu.");
             }
         }
 

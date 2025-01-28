@@ -14,6 +14,7 @@ internal class StartCookingWindowViewModel : ObservableObject
     private readonly Datahelper _dataHelper;
     private ObservableCollection<Step> _steps;
     private Step _currentStep;
+    public bool IsReadingEnabled { get; private set; }
     private ObservableCollection<Ingredient> _ingredients;
     private string _title;
     int _stepCounter;
@@ -68,16 +69,17 @@ internal class StartCookingWindowViewModel : ObservableObject
         }
     }
 
-    public StartCookingWindowViewModel(int recipeId)
+    public StartCookingWindowViewModel(int recipeId, bool isReadingEnabled)
     {
         _dataHelper = new Datahelper(@"../../recipes.db");
         LoadRecipeDetails(recipeId);
         CurrentStep = Steps.FirstOrDefault();
+        IsReadingEnabled = isReadingEnabled;
 
         _synthesizer = new SpeechSynthesizer();
         StopReadingCommand = new RelayCommand(StopReading);
 
-        if (CurrentStep != null)
+        if (CurrentStep != null && IsReadingEnabled)
         {
             ReadStepAloud(CurrentStep);
         }
@@ -205,7 +207,10 @@ internal class StartCookingWindowViewModel : ObservableObject
         if (CurrentStep.StepNumber > 1)
         {
             CurrentStep = Steps[CurrentStep.StepNumber - 2];
-            ReadStepAloud(CurrentStep);
+            if (IsReadingEnabled)
+            {
+                ReadStepAloud(CurrentStep);
+            }
         }
     }
 
@@ -214,7 +219,10 @@ internal class StartCookingWindowViewModel : ObservableObject
         if (_stepCounter - CurrentStep.StepNumber > 0)
         {
             CurrentStep = Steps[CurrentStep.StepNumber];
-            ReadStepAloud(CurrentStep); // Czytanie na głos po przejściu do następnego kroku
+            if (IsReadingEnabled)
+            {
+                ReadStepAloud(CurrentStep);
+            }
         }
     }
 }

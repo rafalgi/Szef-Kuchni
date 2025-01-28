@@ -16,10 +16,10 @@ namespace Szef_kuchni.MVVM.View
 {
     public partial class StartCookingWindow : UserControl
     {
-        public StartCookingWindow(int recipeId)
+        public StartCookingWindow(int recipeId, bool isReadingEnabled)
         {
             InitializeComponent();
-            this.DataContext = new StartCookingWindowViewModel(recipeId);
+            this.DataContext = new StartCookingWindowViewModel(recipeId, isReadingEnabled);
         }
 
         // Obsługa zdarzenia Unloaded
