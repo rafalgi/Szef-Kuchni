@@ -29,6 +29,28 @@ internal class StartCookingWindowViewModel : ObservableObject
     private SpeechRecognitionEngine _recognizer;
     private SpeechSynthesizer _synthesizer;
 
+
+    private bool _isNextStepVisible;
+    public bool IsNextStepVisible
+    {
+        get => _isNextStepVisible;
+        set
+        {
+            _isNextStepVisible = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _isPreviousStepVisible;
+    public bool IsPreviousStepVisible
+    {
+        get => _isPreviousStepVisible;
+        set
+        {
+            _isPreviousStepVisible = value;
+            OnPropertyChanged();
+        }
+    }
     public ObservableCollection<Step> Steps
     {
         get => _steps;
@@ -66,6 +88,7 @@ internal class StartCookingWindowViewModel : ObservableObject
         {
             _currentStep = value;
             OnPropertyChanged();
+            UpdateStepVisibility();
         }
     }
 
@@ -79,13 +102,17 @@ internal class StartCookingWindowViewModel : ObservableObject
         _synthesizer = new SpeechSynthesizer();
         StopReadingCommand = new RelayCommand(StopReading);
 
-        if (CurrentStep != null && IsReadingEnabled)
+        if (CurrentStep != null)
         {
-            ReadStepAloud(CurrentStep);
+            IsNextStepVisible = true;
+            if (IsReadingEnabled)
+            {
+                ReadStepAloud(CurrentStep);
+            }
         }
 
         ShowIngredientsCommand = new RelayCommand(ExecuteShowIngredients);
-        CloseIngredientsCommand = new RelayCommand(ExecuteCloseIngredients); // Nowa komenda
+        CloseIngredientsCommand = new RelayCommand(ExecuteCloseIngredients);
         NextStepCommand = new RelayCommand(NextStep);
         PreviousStepCommand = new RelayCommand(PreviousStep);
         _stepCounter = _steps?.Count ?? 0;
@@ -200,6 +227,11 @@ internal class StartCookingWindowViewModel : ObservableObject
             _ingredientsWindow.Close();
             _ingredientsWindow = null;
         }
+    }
+    private void UpdateStepVisibility()
+    {
+        IsPreviousStepVisible = CurrentStep.StepNumber > 1;
+        IsNextStepVisible = _stepCounter - CurrentStep.StepNumber > 0;
     }
 
     private void PreviousStep(object obj)

@@ -6,12 +6,14 @@
              xmlns:view="clr-namespace:Szef_kuchni.MVVM.View"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Theme/MenuButtonTheme.xaml"/>
                 <ResourceDictionary Source="Theme/TextBoxTheme.xaml"/>
                 <ResourceDictionary Source="Theme/NavigationButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
             <DataTemplate DataType='{x:Type viewModel:HomeViewModel}'>
                 <view:HomeView/>
             </DataTemplate>
