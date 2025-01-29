@@ -205,18 +205,16 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
         {
             string outputPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{Title}.pdf");
 
-            // Tworzenie dokumentu PDF
             using (FileStream fs = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
             using (Document doc = new Document(PageSize.A4))
             using (PdfWriter writer = PdfWriter.GetInstance(doc, fs))
             {
-                var backgroundColor = new BaseColor(240, 240, 220); // Jasny kolor przypominający papier
+                var backgroundColor = new BaseColor(240, 240, 220); 
                 writer.PageEvent = new PdfBackgroundHelper(backgroundColor);
 
                 doc.Open();
 
-                // Ładowanie czcionki TrueType, która obsługuje polskie znaki (np. Arial)
-                string fontPath = @"C:\Windows\Fonts\arial.ttf"; // Ścieżka do czcionki Arial
+                string fontPath = @"C:\Windows\Fonts\arial.ttf"; 
 
                 BaseFont baseFont1 = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                 var font1 = new Font(baseFont1, 15, Font.BOLD);
@@ -233,7 +231,7 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
                 BaseFont baseFont5 = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                 var font5 = new Font(baseFont1, 18, Font.BOLD);
 
-                // Dodaj tytuł
+
                 doc.Add(new iTextSharp.text.Paragraph(Title, font5) { Alignment = iTextSharp.text.Element.ALIGN_CENTER });
                 doc.Add(Chunk.NEWLINE);
 
@@ -255,7 +253,6 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
                 doc.Add(paragraph2);
                 doc.Add(Chunk.NEWLINE);
 
-                // Dodaj obrazek (jeśli istnieje)
                 if (RecipeImagePath.StartsWith("pack://"))
                 {
                     try
@@ -265,20 +262,16 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
 
                         if (streamResourceInfo != null)
                         {
-                            // Wczytaj obraz ze strumienia
                             using (var resourceStream = streamResourceInfo.Stream)
                             {
-                                // Zapisywanie pliku tymczasowego
                                 string tempFilePath = Path.GetTempFileName();
                                 using (var fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
                                 {
                                     resourceStream.CopyTo(fileStream);
                                 }
 
-                                // Załaduj obraz z tymczasowej ścieżki
                                 iTextSharp.text.Image recipeImage = iTextSharp.text.Image.GetInstance(tempFilePath);
 
-                                // Skalowanie obrazu
                                 float maxWidth = 250f;
                                 float maxHeight = 250f;
 
@@ -289,7 +282,6 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
                                 doc.Add(recipeImage);
                                 doc.Add(Chunk.NEWLINE);
 
-                                // Usuń plik tymczasowy (opcjonalnie)
                                 File.Delete(tempFilePath);
                             }
                         }
@@ -308,7 +300,6 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
                     MessageBox.Show($"Ścieżka do obrazu nie zaczyna się od 'pack://': {RecipeImagePath}", "Błąd ścieżki", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
-                // Dodaj składniki
                 doc.Add(new iTextSharp.text.Paragraph("\nSkładniki:", font1));
                 foreach (var ingredient in Ingredients)
                 {
@@ -352,7 +343,6 @@ internal class RecipeDetailsWindowViewModel : ObservableObject
 
         public override void OnEndPage(PdfWriter writer, Document document)
         {
-            // Dodawanie tła do każdej strony
             PdfContentByte canvas = writer.DirectContentUnder;
             Rectangle background = new Rectangle(document.PageSize);
             background.BackgroundColor = _backgroundColor;

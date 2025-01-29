@@ -23,7 +23,7 @@ internal class StartCookingWindowViewModel : ObservableObject
     private IngredientsWindow _ingredientsWindow;
 
     public ICommand ShowIngredientsCommand { get; }
-    public ICommand CloseIngredientsCommand { get; } // Nowa komenda
+    public ICommand CloseIngredientsCommand { get; } 
     public ICommand NextStepCommand { get; }
     public ICommand PreviousStepCommand { get; }
     public ICommand StopReadingCommand { get; }

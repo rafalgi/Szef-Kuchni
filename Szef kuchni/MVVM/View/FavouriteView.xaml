@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:Szef_kuchni.MVVM.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <!-- Zasoby kontrolki -->
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>

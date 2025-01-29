@@ -7,7 +7,6 @@
         Background="Transparent"
         AllowsTransparency="True"
         SizeToContent="WidthAndHeight">
-    <!-- Dostosowanie okna do zawartości -->
 
     <Border CornerRadius="30" Padding="10">
         <Border.Background>
@@ -19,17 +18,12 @@
         </Border.Background>
 
         <Grid>
-            <!-- RowDefinitions: pierwszy wiersz dla przycisków, drugi dla zawartości -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
-                <!-- Pasek nagłówka -->
                 <RowDefinition Height="Auto" />
-                <!-- Dostosowuje się do zawartości -->
             </Grid.RowDefinitions>
 
-            <!-- Nagłówek -->
             <DockPanel Grid.Row="0" VerticalAlignment="Center">
-                <!-- Przycisk Zamknij -->
                 <Button Content="X"
                         Width="30"
                         Height="30"
@@ -55,7 +49,6 @@
                         FontSize="14"
                         Click="MinimizeApp_Click" />
 
-                <!-- Nazwa przepisu - TextBlock dodany do DockPanel, przed przyciskami -->
                 <TextBlock Text="{Binding Title}"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left"
@@ -65,8 +58,7 @@
                     Margin="10,0,10,0" DockPanel.Dock="Left"/>
             </DockPanel>
 
-            <!-- Zawartość okna -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" MaxHeight="600">
                 <StackPanel>
                     <TextBlock Text="Składniki:" FontSize="18" FontWeight="Bold" Margin="10" />
                     <ItemsControl ItemsSource="{Binding Ingredients}">
