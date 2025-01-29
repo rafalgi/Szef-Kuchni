@@ -9,6 +9,7 @@ using Szef_kuchni.MVVM.View;
 using Szef_kuchni.MVVM.ViewModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 internal class StartCookingWindowViewModel : ObservableObject
 {
@@ -123,38 +124,72 @@ internal class StartCookingWindowViewModel : ObservableObject
 
     private void InitializeSpeechRecognition()
     {
+        if (SpeechRecognitionEngine.InstalledRecognizers().Count == 0)
+        {
+            ShowMessage("Brak zainstalowanych modułów rozpoznawania mowy.", "Błąd!");
+            return;
+        }
+
         var recognizerInfo = SpeechRecognitionEngine
             .InstalledRecognizers()
             .FirstOrDefault(r => r.Culture.Name == "en-GB");
 
         if (recognizerInfo == null)
         {
-            Task.Run(() =>
-            {
-                System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                {
-                    var owner = System.Windows.Application.Current.MainWindow;
-                    System.Windows.MessageBox.Show(owner, "Speech recognition for English (en-GB) is not available.", "Warning!", MessageBoxButton.OK, MessageBoxImage.Information);
-                });
-            });
+            ShowMessage("Rozpoznawanie mowy w języku angielskim nie jest dostępne. Sprawdź, czy masz dodany język angielski z funkcją rozpoznawania mowy.", "Ostrzeżenie!");
             return;
         }
 
-        _recognizer = new SpeechRecognitionEngine(recognizerInfo);
-
-        var commands = new Choices("next", "previous", "ingredients", "close ingredients");
-        var grammarBuilder = new GrammarBuilder(commands)
+        try
         {
-            Culture = recognizerInfo.Culture
-        };
+            _recognizer = new SpeechRecognitionEngine(recognizerInfo);
 
-        var grammar = new Grammar(grammarBuilder);
+            if (SpeechRecognitionEngine.InstalledRecognizers().Count > 0)
+            {
+                try
+                {
+                    _recognizer.SetInputToDefaultAudioDevice();
+                }
+                catch (InvalidOperationException)
+                {
+                    ShowMessage("Nie wykryto mikrofonu.", "Błąd!");
+                    return;
+                }
+            }
+            else
+            {
+                ShowMessage("Brak dostępnych urządzeń wejściowych (mikrofonu).", "Błąd!");
+                return;
+            }
 
-        _recognizer.LoadGrammar(grammar);
-        _recognizer.SpeechRecognized += Recognizer_SpeechRecognized;
-        _recognizer.SetInputToDefaultAudioDevice();
+            var commands = new Choices("next", "previous", "ingredients", "close ingredients");
+            var grammarBuilder = new GrammarBuilder(commands)
+            {
+                Culture = recognizerInfo.Culture
+            };
 
-        _recognizer.RecognizeAsync(RecognizeMode.Multiple);
+            var grammar = new Grammar(grammarBuilder);
+            _recognizer.LoadGrammar(grammar);
+            _recognizer.SpeechRecognized += Recognizer_SpeechRecognized;
+
+            _recognizer.RecognizeAsync(RecognizeMode.Multiple);
+        }
+        catch (Exception ex)
+        {
+            ShowMessage($"Wystąpił błąd podczas inicjalizacji rozpoznawania mowy: {ex.Message}", "Błąd!");
+        }
+    }
+
+    private void ShowMessage(string message, string title)
+    {
+        Task.Run(() =>
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                var owner = System.Windows.Application.Current.MainWindow;
+                System.Windows.MessageBox.Show(owner, message, title, MessageBoxButton.OK, MessageBoxImage.Information);
+            });
+        });
     }
 
     private void Recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
