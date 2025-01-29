@@ -8,6 +8,7 @@ using Szef_kuchni.MVVM.Model;
 using Szef_kuchni.MVVM.View;
 using Szef_kuchni.MVVM.ViewModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 internal class StartCookingWindowViewModel : ObservableObject
 {
@@ -128,7 +129,14 @@ internal class StartCookingWindowViewModel : ObservableObject
 
         if (recognizerInfo == null)
         {
-            MessageBox.Show("Speech recognition for English (en-GB) is not available.");
+            Task.Run(() =>
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var owner = System.Windows.Application.Current.MainWindow;
+                    System.Windows.MessageBox.Show(owner, "Speech recognition for English (en-GB) is not available.", "Warning!", MessageBoxButton.OK, MessageBoxImage.Information);
+                });
+            });
             return;
         }
 
