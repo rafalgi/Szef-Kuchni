@@ -21,6 +21,7 @@ internal class StartCookingWindowViewModel : ObservableObject
     private string _title;
     int _stepCounter;
     private IngredientsWindow _ingredientsWindow;
+    bool isPaulinaAvailable;
 
     public ICommand ShowIngredientsCommand { get; }
     public ICommand CloseIngredientsCommand { get; } 
@@ -30,7 +31,6 @@ internal class StartCookingWindowViewModel : ObservableObject
 
     private SpeechRecognitionEngine _recognizer;
     private SpeechSynthesizer _synthesizer;
-
 
     private bool _isNextStepVisible;
     public bool IsNextStepVisible
@@ -101,13 +101,13 @@ internal class StartCookingWindowViewModel : ObservableObject
         CurrentStep = Steps.FirstOrDefault();
         IsReadingEnabled = isReadingEnabled;
 
-        _synthesizer = new SpeechSynthesizer();
+        InitializeSynthesizer();
         StopReadingCommand = new RelayCommand(StopReading);
 
         if (CurrentStep != null)
         {
             IsNextStepVisible = true;
-            if (IsReadingEnabled)
+            if (IsReadingEnabled && isPaulinaAvailable)
             {
                 ReadStepAloud(CurrentStep);
             }
@@ -120,6 +120,28 @@ internal class StartCookingWindowViewModel : ObservableObject
         _stepCounter = _steps?.Count ?? 0;
 
         InitializeSpeechRecognition();
+    }
+
+    private void InitializeSynthesizer()
+    {
+        _synthesizer = new SpeechSynthesizer();
+        var availableVoices = _synthesizer.GetInstalledVoices();
+        isPaulinaAvailable = availableVoices.Any(voice => voice.VoiceInfo.Name.Contains("Microsoft Paulina Desktop"));
+
+        if (isPaulinaAvailable)
+        {
+            _synthesizer.SelectVoice("Microsoft Paulina Desktop");
+        }
+        else
+        {
+            Task.Run(() =>
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    MessageBox.Show("Polski syntezator nie jest dostępny!", "Warning!", MessageBoxButton.OK, MessageBoxImage.Information);
+                });
+            });
+        }
     }
 
     private void InitializeSpeechRecognition()
@@ -282,7 +304,7 @@ internal class StartCookingWindowViewModel : ObservableObject
         if (CurrentStep.StepNumber > 1)
         {
             CurrentStep = Steps[CurrentStep.StepNumber - 2];
-            if (IsReadingEnabled)
+            if (IsReadingEnabled && isPaulinaAvailable)
             {
                 ReadStepAloud(CurrentStep);
             }
@@ -294,7 +316,7 @@ internal class StartCookingWindowViewModel : ObservableObject
         if (_stepCounter - CurrentStep.StepNumber > 0)
         {
             CurrentStep = Steps[CurrentStep.StepNumber];
-            if (IsReadingEnabled)
+            if (IsReadingEnabled && isPaulinaAvailable)
             {
                 ReadStepAloud(CurrentStep);
             }
