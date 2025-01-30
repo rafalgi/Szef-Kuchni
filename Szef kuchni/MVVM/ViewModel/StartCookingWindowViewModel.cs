@@ -134,13 +134,7 @@ internal class StartCookingWindowViewModel : ObservableObject
         }
         else
         {
-            Task.Run(() =>
-            {
-                System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Show("Polski syntezator nie jest dostępny!", "Warning!", MessageBoxButton.OK, MessageBoxImage.Information);
-                });
-            });
+            ShowMessage("Polski syntezator nie jest dostępny!", "Ostrzeżenie!");
         }
     }
 
